@@ -1,27 +1,14 @@
-# gurdon-bioinformatics
-
----
-pagetitle: "Gurdon Institute Bioinformatics Group"
----
-
 # Gurdon Institute Bioinformatics Group
 
 The group currently consists of Adam Reid, Head of Bioinformatics.
 
 ## GitHub software projects
 
-mfed: analysis of DamID-seq data.
+[mfed](https://github.com/adamjamesreid/mfed): analysis of DamID-seq data.
 
-https://github.com/adamjamesreid/mfed
+[dmvar](https://github.com/adamjamesreid/dmvar): identifying DNA sequence variants in Drosophila mutant lines
 
-dmvar: identifying DNA sequence variants in Drosophila mutant lines
-
-https://github.com/adamjamesreid/dmvar
-
-mito_var: mitochondrial rare variant calling in Drosophila
-
-https://github.com/adamjamesreid/mito_var
-
+[mito_var](https://github.com/adamjamesreid/mito_var): mitochondrial rare variant calling in Drosophila
 
 ## Course materials
 
