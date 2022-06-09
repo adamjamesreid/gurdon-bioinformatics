@@ -642,25 +642,28 @@ sbatch -J sample2_batch map_batch.sh 
   
 ### Online courses
 
-Linux command line
+#### Linux command line
   
-https://ubuntu.com/tutorials/command-line-for-beginners#1-overview
-https://www.futurelearn.com/courses/linux-for-bioinformatics
-http://www.ee.surrey.ac.uk/Teaching/Unix/
-https://swcarpentry.github.io/shell-novice/
+[https://ubuntu.com/tutorials/command-line-for-beginners#1-overview](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview)
+  
+[https://www.futurelearn.com/courses/linux-for-bioinformatics](https://www.futurelearn.com/courses/linux-for-bioinformatics)
 
-Cluster computing
+[http://www.ee.surrey.ac.uk/Teaching/Unix/](http://www.ee.surrey.ac.uk/Teaching/Unix/)
+
+[https://swcarpentry.github.io/shell-novice/](https://swcarpentry.github.io/shell-novice/)
+
+#### Cluster computing
   
-https://training.csx.cam.ac.uk/bioinformatics/course/bioinfo-introhpc
-http://bioinformatics-core-shared-training.github.io/shell-novice/
-https://bioinformatics-core-shared-training.github.io/Managing-your-research-data/
-https://github.com/bioinformatics-core-shared-training/nextflow_september_2021
-http://bioinformatics-core-shared-training.github.io/hpc/
+[https://training.csx.cam.ac.uk/bioinformatics/course/bioinfo-introhpc](https://training.csx.cam.ac.uk/bioinformatics/course/bioinfo-introhpc)
+[http://bioinformatics-core-shared-training.github.io/shell-novice/](http://bioinformatics-core-shared-training.github.io/shell-novice/)
+[https://bioinformatics-core-shared-training.github.io/Managing-your-research-data/](https://bioinformatics-core-shared-training.github.io/Managing-your-research-data/)
+[https://github.com/bioinformatics-core-shared-training/nextflow_september_2021](https://github.com/bioinformatics-core-shared-training/nextflow_september_2021)
+[http://bioinformatics-core-shared-training.github.io/hpc/](http://bioinformatics-core-shared-training.github.io/hpc/)
 
 <hr>  
 
 ![wellcome](../images/wellcome.png)
-![gurdon](../images/gurdon.svg)
+![gurdon](../images/gurdon.png)
 <img src="../images/cambridge.png" alt="cambridge" width="600"/>
 
 Licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
