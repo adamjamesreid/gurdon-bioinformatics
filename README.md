@@ -18,7 +18,7 @@ Adam Reid - Head of Bioinformatics (formerly a parasitologist at the Wellcome Sa
 <hr>  
 
 <img src="images/wellcome.png" alt="wellcome" width="300"/>
-<img src="images/gurdon.svg" alt="gurdon" width="300"/>
+<img src="images/gurdon.png" alt="gurdon" width="300"/>
 <img src="images/cambridge.png" alt="cambridge" width="300"/>
 
 Licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
