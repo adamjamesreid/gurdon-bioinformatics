@@ -221,17 +221,17 @@ N.b. To run visualisations you will need to copy your files to your local comput
 
 4. Copy the file from the cluster to your local machine using `scp`
 
-5. Open a new terminal
+  - Open a new terminal
 
-6. cp `automated_gene_summaries.tsv.gz` from <username>@cb-milan1.gurdon.private.cam.ac.uk:<path>
+  - scp `automated_gene_summaries.tsv.gz` from <username>@cb-milan1.gurdon.private.cam.ac.uk:<path>
 
-7. Unzip the file on the command line using `gunzip`
+5. Unzip the file on the command line using `gunzip`
 
-8. Check the file contents
+6. Check the file contents
 
-9. Get just the first ten lines and make a new file called `head.txt`
+7. Get just the first ten lines and make a new file called `head.txt`
 
-10. Copy `head.txt` to the cluster with `scp`
+8. Copy `head.txt` to the cluster with `scp`
 
 
 ## Part 2 Submitting jobs
