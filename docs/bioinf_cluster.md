@@ -550,65 +550,68 @@ scp head.txt ajr236@cb-milan1.gurdon.private.cam.ac.uk:~/tutorial/
 ### Practical 2 answers
 
 1. Use srun to submit the command `hostname` – which node did the job run on?
+
 ```
 srun hostname
 ```
 
 2. Adjust the parameters of srun to run the same command multiple times (-n) – did they run on the same or different nodes?
+
 ```
 srun --ntasks 2 hostname
 ```
 
 3. Use slurm_sub.py to submit the command `sleep 100`. Use `squeue –u <user>` to find out which node it is running on. What were the output status and error messages from the job? What time did the job start and when did it finish?
+  
 ```
-# submit the sleep command using slurm_sub.py
+\# submit the sleep command using slurm_sub.py
 slurm_sub.py sleep 100
 
-# Check that the job is running and on which node
+\# Check that the job is running and on which node
 squeue -u <user>
 
-# When the job is finished, look at the start and finish times to work out how long it took
-# Also look to see if the job finished properly e.g. “Job finished successfully, return value: 0”
+\# When the job is finished, look at the start and finish times to work out how long it took
+\# Also look to see if the job finished properly e.g. “Job finished successfully, return value: 0”
 cat job.o
 
-# Error file should be empty
+\# Error file should be empty
 cat job.e
 ```
 
 4. Run the sleep 100 command again, but kill it before it finishes. What was the output/error status of the job this time?
 ```
-# submit the sleep command using slurm_sub.py
+\# submit the sleep command using slurm_sub.py
 slurm_sub.py sleep 100
 
-# Kill the job (get the job id from the message upon submission or from squeue
+\# Kill the job (get the job id from the message upon submission or from squeue
 scancel <jobid> 
 
-# There is no status message in stdout
+\# There is no status message in stdout
 cat job.o
 
-# Error file should say something like “slurmstepd: *** JOB 5010440 ON node20 CANCELLED AT 2022-01-31T15:49:14 ***”
+\# Error file should say something like “slurmstepd: *** JOB 5010440 ON node20 CANCELLED AT 2022-01-31T15:49:14 ***”
 cat job.e
 ```
   
 5. Copy fastq files: `sample1_1.fastq` and `sample1_2.fastq` from `/mnt/bioinfo_sharing/sharing/course_material/cluster/` to your tutorial directory. Map the data to reference fasta `dm6_chrM.fa` with the following commands, running each job using slurm_sub.py
 
 ```
-# Copy fastq files   
+\# Copy fastq files   
 cp  /mnt/bioinfo_sharing/sharing/course_material/cluster/sample1_*.fastq .
   
-# Make an index of the reference sequence 
+\# Make an index of the reference sequence 
 bwa index dm6_chrM.fa 
 
-# Run the mapping step
+\# Run the mapping step
 slurm_sub.py –j bwamem1 bwa mem dm6_chrM.fa sample1_1.fastq sample1_2.fastq -o sample1.sam
   
-# Convert sam to bam
+\# Convert sam to bam
 slurm_sub.py –j sam2bam1 samtools view -b sample1.sam -o sample1.bam
 
-# sort the bam file
+\# sort the bam file
 slurm_sub.py –j sort1 samtools sort -o sample1_sorted.bam sample1.bam
 
-# Index the bam file
+\# Index the bam file
 slurm_sub.py –j index1 samtools index sample1_sorted.bam
 ```
 
@@ -617,7 +620,7 @@ slurm_sub.py –j index1 samtools index sample1_sorted.bam
 Map_batch.sh –
 
 ```
-#!/bin/bash
+\#!/bin/bash
 sample_name='sample2'
 
 bwa mem ../dm6_chrM.fa $sample_name\_1.fastq  $sample_name\_2.fastq -o $sample_name\.sam
