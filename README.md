@@ -1,6 +1,6 @@
 # Gurdon Institute Bioinformatics Group
 
-The group currently consists of Adam Reid, Head of Bioinformatics.
+Adam Reid - Head of Bioinformatics (formerly a parasitologist at the Wellcome Sanger Institute).
 
 ## GitHub software projects
 
