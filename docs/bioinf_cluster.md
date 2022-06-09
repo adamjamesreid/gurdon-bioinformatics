@@ -465,11 +465,11 @@ slurm_sub.py –j view1 samtools view –b –o sample1.bam sample1.sam
 Slurm_sub.py –j sort1 samtools sort –o sample1_sort.bam sample1.bam
 slurm_sub.py –j index1 samtools index sample1_sort.bam 
 ```
-
-BONUS EXERCISE: Write a shell script which captures the steps and runs the whole thing. Then run on several sets of fastq files.
   
 6. Try viewing the mapped reads in [IGV](https://software.broadinstitute.org/software/igv/download) on your laptop or using `samtools view sample1_sort.bam | less` on the cluster. Always check your output!
 
+BONUS EXERCISE: Write a shell script which captures the steps and runs the whole thing. Then run on several sets of fastq files.
+  
 ## Part 3 Rstudio and installing software 
 
 ### RStudio server
