@@ -416,10 +416,10 @@ It is located at `/mnt/home3/slurm/slurm_sub.py`. Simple things can be run very 
   
 If you don't specify resource requirements you will get the following resources by default:
 
-7 days of running time (equivalent to -t 7-00:00:00)
-1804 partition, with Ubuntu 18.04 operating system
-1 CPU (equivalent to -c 1)
-4GB RAM (equivalent to --mem=4000)
+- 7 days of running time (equivalent to -t 7-00:00:00)
+- 1804 partition, with Ubuntu 18.04 operating system
+- 1 CPU (equivalent to -c 1)
+- 4GB RAM (equivalent to --mem=4000)
   
 Choosing your parameters can be tricky, because you probably don't know how much you need. It is always sensible to do a test run to see how much RAM, time and how many CPUs are required. You can run `seff` once it has finished to see what was used and then extrapolate to your full dataset.
  
