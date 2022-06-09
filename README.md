@@ -13,3 +13,12 @@ The group currently consists of Adam Reid, Head of Bioinformatics.
 ## Course materials
 
 [Bioinformatics on the cluster](https://github.com/adamjamesreid/gurdon-bioinformatics/bioinf_cluster.md)
+
+
+<hr>  
+
+<img src="images/wellcome.png" alt="wellcome" width="300"/>
+<img src="images/gurdon.svg" alt="gurdon" width="300"/>
+<img src="images/cambridge.png" alt="cambridge" width="300"/>
+
+Licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
