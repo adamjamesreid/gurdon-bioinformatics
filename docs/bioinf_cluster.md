@@ -98,7 +98,7 @@ Users do not have direct access to the _compute nodes_ and instead submitting jo
 
 ### The Gurdon compute cluster
 
-!!! Add figure of new cluster here
+![Gurdon cluster architecture](../images/gurdon_cluster_outline-01.png)
 
 #### Filesystem
 
