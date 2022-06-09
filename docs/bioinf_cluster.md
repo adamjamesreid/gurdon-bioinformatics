@@ -456,7 +456,7 @@ If we submit *sleep 100* to the cluster as a batch job using *slurm_sub.py* we g
 
 4. Run the `sleep 100` command again, but kill it before it finishes. What was the output/error status of the job this time?
 
-5. Copy fastq files: `sample1_1.fastq` and `sample1_2.fastq` from `/mnt/bioinfo_sharing/sharing/course_material/cluster/` to your tutorial directory. Map the data to reference fasta `dm6_chrM.fa` with the following commands, running each job using slurm_sub.py.  __Do not copy and paste the commands – they may fail due to hidden characters.__
+5. Copy files: `sample1_1.fastq`, `sample1_2.fastq` and `dm6_chrM.fa` from `/mnt/bioinfo_sharing/sharing/course_material/cluster/` to your tutorial directory. Map the data to reference fasta `dm6_chrM.fa` with the following commands, running each job using slurm_sub.py.  __Do not copy and paste the commands – they may fail due to hidden characters.__
 
 ```
 slurm_sub.py –j index1 bwa index dm6_chrM.fa
@@ -594,11 +594,12 @@ cat job.o
 cat job.e
 ```
   
-5. Copy fastq files: `sample1_1.fastq` and `sample1_2.fastq` from `/mnt/bioinfo_sharing/sharing/course_material/cluster/` to your tutorial directory. Map the data to reference fasta `dm6_chrM.fa` with the following commands, running each job using slurm_sub.py
+5. Copy files: `sample1_1.fastq`, `sample1_2.fastq` and `dm6_chrM.fa` from `/mnt/bioinfo_sharing/sharing/course_material/cluster/` to your tutorial directory. Map the data to reference fasta `dm6_chrM.fa` with the following commands, running each job using slurm_sub.py
 
 ```
-# Copy fastq files   
-cp  /mnt/bioinfo_sharing/sharing/course_material/cluster/sample1_*.fastq .
+# Copy files   
+cp /mnt/bioinfo_sharing/sharing/course_material/cluster/sample1_*.fastq .
+cp /mnt/bioinfo_sharing/sharing/course_material/cluster/dm6_chrM.fa .
   
 # Make an index of the reference sequence 
 bwa index dm6_chrM.fa 
