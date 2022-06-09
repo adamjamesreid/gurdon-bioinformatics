@@ -655,9 +655,13 @@ sbatch -J sample2_batch map_batch.sh 
 #### Cluster computing
   
 [https://training.csx.cam.ac.uk/bioinformatics/course/bioinfo-introhpc](https://training.csx.cam.ac.uk/bioinformatics/course/bioinfo-introhpc)
+
 [http://bioinformatics-core-shared-training.github.io/shell-novice/](http://bioinformatics-core-shared-training.github.io/shell-novice/)
+
 [https://bioinformatics-core-shared-training.github.io/Managing-your-research-data/](https://bioinformatics-core-shared-training.github.io/Managing-your-research-data/)
+
 [https://github.com/bioinformatics-core-shared-training/nextflow_september_2021](https://github.com/bioinformatics-core-shared-training/nextflow_september_2021)
+
 [http://bioinformatics-core-shared-training.github.io/hpc/](http://bioinformatics-core-shared-training.github.io/hpc/)
 
 <hr>  
