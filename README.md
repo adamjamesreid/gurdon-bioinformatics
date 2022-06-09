@@ -12,7 +12,7 @@ Adam Reid - Head of Bioinformatics (formerly a parasitologist at the Wellcome Sa
 
 ## Course materials
 
-[Bioinformatics on the cluster](https://github.com/adamjamesreid/gurdon-bioinformatics/bioinf_cluster.md)
+[Bioinformatics on the cluster](docs/bioinf_cluster.md)
 
 
 <hr>  
