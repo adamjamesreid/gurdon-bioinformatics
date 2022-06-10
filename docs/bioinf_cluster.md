@@ -160,7 +160,14 @@ FASTQ files are manually copied to (Kay Harnish):
 Manually demultiplexed FASTQ files (CI or GI):
 
   `//Datastore/Sequencing/(GL Folder)/CB FASTQ/`
-  
+
+#### Bioinformatics share
+
+Team workspaces are not visible from other teams and so to allow people to sharing of data between the Bioinformatics group and other groups. we have set up a shared space with unrestricted access. This means that anything can be deleted by anyone so please be careful.
+
+This can be accessed on the cluster here: `/mnt/bioinfo_sharing/sharing/`
+
+or from your Mac by using *Finder*. Under the *Go* menu, select *Connect to server*, type `smb://cb-share1.gurdon.private.cam.ac.uk` in the box and choose to connect as Guest.
 
 ### Getting on the cluster
 
