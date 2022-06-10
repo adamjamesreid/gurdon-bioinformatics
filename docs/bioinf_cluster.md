@@ -112,19 +112,19 @@ A scratch space (e.g. /mnt/scratch/user), which is high-performance, large-scale
 
 At the Gurdon Institute we have:
 
-- __home1__ (/mnt/home1/user)
+- __home1__ (/mnt/home1/group/user)
 
   Features: limits on home directory size (1Tb) and file number, backed up
 
   Useful for: Installing software and backing up results
    
-- __home3__ (/mnt/home3/user)
+- __home3__ (/mnt/home3/group/user)
 
   Features: limited total space (4 Tb), backed up
 
   Useful for: Conda environments, Java jar files
 
-- __scratch__ (/mnt/scratch/user)
+- __scratch__ (/mnt/scratch/group/user)
 
   Features: no quotas (~1 Petabyte total), not backed up
 
