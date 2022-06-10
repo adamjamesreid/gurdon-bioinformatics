@@ -163,7 +163,7 @@ Manually demultiplexed FASTQ files (CI or GI):
 
 #### Bioinformatics share
 
-Team workspaces are not visible from other teams and so to allow people to sharing of data between the Bioinformatics group and other groups. we have set up a shared space with unrestricted access. This means that anything can be deleted by anyone so please be careful.
+Team workspaces are not visible by members of other teams and so to allow people to share data between the Bioinformatics group and other groups, we have set up a shared space with unrestricted access. This means that anything can be deleted by anyone so please be careful.
 
 This can be accessed on the cluster here: `/mnt/bioinfo_sharing/sharing/`
 
