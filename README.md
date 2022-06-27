@@ -2,7 +2,7 @@
 
 [Adam Reid](https://www.gurdon.cam.ac.uk/people/adam-reid/) - Head of Bioinformatics
 
-[Ankit Verma] - Bioinformatician
+Ankit Verma - Bioinformatician
 
 ## GitHub software projects
 
