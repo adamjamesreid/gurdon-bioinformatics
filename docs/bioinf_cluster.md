@@ -659,6 +659,8 @@ sbatch -J sample2_batch map_batch.sh 
 [http://www.ee.surrey.ac.uk/Teaching/Unix/](http://www.ee.surrey.ac.uk/Teaching/Unix/)
 
 [https://swcarpentry.github.io/shell-novice/](https://swcarpentry.github.io/shell-novice/)
+  
+(An actual command line interface on the web for practicing)[https://www.tutorialspoint.com/linux_terminal_online.php]
 
 #### Cluster computing
   
