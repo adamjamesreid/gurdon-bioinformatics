@@ -25,7 +25,7 @@ Much of this material has been remixed from training materials developed by Univ
 
 ## Contents
 
-*[Day 1](docs/101-seurat_part1.html) – Tuesday March 21st (9am-5pm)*
+*[Day 1 – Tuesday March 21st (9am-5pm)](101-seurat_part1.html)*
 
 Level 1 meeting room
 
@@ -36,7 +36,7 @@ Level 1 meeting room
 - Batch correction
 - Clustering
 
-*[Day 2](docs/101-seurat_part2.html) – Wednesday March 22nd (9am-5pm)*
+*[Day 2 – Wednesday March 22nd (9am-5pm)](101-seurat_part2.html)*
 
 Level 3 meeting room
 
