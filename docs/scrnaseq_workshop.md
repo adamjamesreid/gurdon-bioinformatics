@@ -21,7 +21,7 @@ Much of this material has been remixed from training materials developed by Univ
 
 ### Pre-requisites
 - Some knowledge of the R programming language - [try this tutorial](https://www.w3schools.com/r/r_intro.asp)
-- If you do not have your own data, it would be useful to identify some public data of interest
+- Most of the course involves a preprepared dataset, but towards the end we aim to work with your own data. If you do not have your own data, it would be useful to identify some public data of interest
 
 ## Contents
 
