@@ -40,4 +40,3 @@ Level 3 meeting room
 •	Identifying differentially expressed genes
 •	Working with your own data or public data of interest
 o	Working with your own data is always harder than with the nice streamlined examples given in a workshop! We can help you get started with some data of specific interest to you.
-![image](https://user-images.githubusercontent.com/26814531/224666620-da100e15-47f4-47e7-8ddf-27087f70e279.png)
