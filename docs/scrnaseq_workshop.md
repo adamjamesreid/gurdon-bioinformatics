@@ -25,18 +25,22 @@ Much of this material has been remixed from training materials developed by Univ
 
 ## Contents
 
-*Day 1 – Tuesday March 21st (9am-5pm)*
-Level 1 meeting room
-•	Raw data processing
-•	Quality Control
-•	Normalisation
-•	Dimension reduction
-•	Batch correction
-•	Clustering
+*[Day 1](docs/101-seurat_part1.html) – Tuesday March 21st (9am-5pm)*
 
-*Day 2 – Wednesday March 22nd (9am-5pm)*
+Level 1 meeting room
+
+- Raw data processing
+- Quality Control
+- Normalisation
+- Dimension reduction
+- Batch correction
+- Clustering
+
+*[Day 2](docs/101-seurat_part2.html) – Wednesday March 22nd (9am-5pm)*
+
 Level 3 meeting room
-•	Identifying cell types
-•	Identifying differentially expressed genes
-•	Working with your own data or public data of interest
-o	Working with your own data is always harder than with the nice streamlined examples given in a workshop! We can help you get started with some data of specific interest to you.
+
+- Identifying cell types
+- Identifying differentially expressed genes
+- Working with your own data or public data of interest
+  - Working with your own data is always harder than with the nice streamlined examples given in a workshop! We can help you get started with some data of specific interest to you.
