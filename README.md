@@ -2,6 +2,8 @@
 
 [Adam Reid](https://www.gurdon.cam.ac.uk/people/adam-reid/) - Head of Bioinformatics
 
+Ankit Verma - Bioinformatician
+
 ## GitHub software projects
 
 [mfed](https://github.com/adamjamesreid/mfed): analysis of DamID-seq data.
@@ -14,6 +16,7 @@
 
 [Bioinformatics on the cluster](docs/bioinf_cluster.md)
 
+[Gurdon scRNA-seq workshop](docs/scrnaseq_workshop.md)
 
 <hr>  
 

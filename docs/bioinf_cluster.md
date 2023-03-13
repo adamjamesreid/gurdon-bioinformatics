@@ -98,7 +98,7 @@ Users do not have direct access to the _compute nodes_ and instead submitting jo
 
 ### The Gurdon compute cluster
 
-<img src="../images/gurdon_cluster_outline-01.png" alt="Gurdon cluster architecture" width="800"/>
+<img src="../images/gurdon_cluster_outline.png" alt="Gurdon cluster architecture" width="800"/>
 
 #### Filesystem
 
@@ -111,19 +111,13 @@ The user's home directory (e.g. /mnt/home1/user) is the default directory that o
 A scratch space (e.g. /mnt/scratch/user), which is high-performance, large-scale storage. This type of storage may be private to the user or shared with a group. It is usually not backed up, so the user needs to ensure that important data are stored elsewhere. This is the main partition were data is processed from.
 
 At the Gurdon Institute we have:
-
-- __home1__ (/mnt/home1/group/user)
-
-  Features: limits on home directory size (1Tb) and file number, backed up
-
-  Useful for: Installing software and backing up results
    
 - __home3__ (/mnt/home3/group/user)
 
-  Features: limited total space (4 Tb), backed up
+  Features: limited total space (1 Tb), backed up
 
-  Useful for: Conda environments, Java jar files
-
+  Useful for: Installing software and backing up results
+  
 - __scratch__ (/mnt/scratch/group/user)
 
   Features: no quotas (~1 Petabyte total), not backed up
@@ -514,13 +508,11 @@ Slurm - https://www.chpc.utah.edu/presentations/SlurmCheatsheet.pdf
 |            |             |
 |------------|-------------|
 | Logging in | `ssh <user>@cb-milan1.gurdon.private.cam.ac.uk` |
-| Filesystem | __home1__ `/mnt/home1` – 1Tb of space, limited and file numbers |
-|            | (Installing software and backing up results) |
-|            | __Scratch__ `/mnt/scratch` – no quotas (~1 Petabyte total) |
+| Filesystem | __Scratch__ `/mnt/scratch` – no quotas (~1 Petabyte total) |
 |            | (Running compute jobs) |
-|            | __home3__ `/mnt/home3` – limited space (4 Tb) |
-|            | (Conda environments, Java jar files) |
-| Datastore  | `/mnt/Sequencing` (from head nodes only) |
+|            | __home3__ `/mnt/home3` – limited space (1 Tb) |
+|            | (Installing software, backing up results, Conda environments) |
+| Datastore  | `/mnt/Sequencing` (from head node only) |
 |            | `smb://datastore.computing.gurdon.cam.ac.uk/Sequencing` mounted locally on your Mac or PC |
 | RStudio server | v4.2.0   http://cb-milan1.gurdon.private.cam.ac.uk:8787/ |
 |            |v4.1.0  http://cb-head4.gurdon.private.cam.ac.uk:8787/ |
@@ -659,6 +651,8 @@ sbatch -J sample2_batch map_batch.sh 
 [http://www.ee.surrey.ac.uk/Teaching/Unix/](http://www.ee.surrey.ac.uk/Teaching/Unix/)
 
 [https://swcarpentry.github.io/shell-novice/](https://swcarpentry.github.io/shell-novice/)
+  
+[An actual command line interface on the web for practicing](https://www.tutorialspoint.com/linux_terminal_online.php)
 
 #### Cluster computing
   

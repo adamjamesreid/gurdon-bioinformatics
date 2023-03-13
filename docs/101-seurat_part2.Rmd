@@ -1,0 +1,382 @@
+---
+title: "Introduction to single-cell RNA-seq analysis using Seurat - Part 2"
+author: "Adam Reid, Gurdon Institute, University of Cambridge"
+date: '2023-01-10'
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "../course_files/")
+```
+
+# Identifying cell types
+
+## Introduction
+
+In [part 1](101-seurat_part1.html) we showed how to pre-process some example scRNA-seq datasets using Seurat. 
+In part 2 we will use a different subset of the data from the Caron et al. paper to show how to go about exploring the data and answering biological questions.
+
+The datasets here are the four _EVT6_RUNX1 cALL_ samples and the three healthy donor _PBMMC_ samples. 
+We will use these datasets to identify cell types, and then identify genes which vary in expression between patients in particular cell types. 
+But first, because we are analysing a different subset of the data, we need to do the QC and batch correction for these datasets.
+
+```{r libraries, message=FALSE}
+# load packages
+library(Seurat)
+library(sctransform)
+library(tidyr)
+library(dplyr)
+
+# set seed for randomisation (e.g. UMAP dimension reduction)
+set.seed = 123
+```
+
+## Read in datasets
+
+Read in a list of samples and CellRanger results locations. This is a convenient way to manage reading in a list of samples without having to list them explicitly in R. 
+You can change the list and not have to change your code.
+
+```{r read_sample_list}
+message(getwd())
+samples_df <- read.csv("Data/samples_to_downsample.csv", header=TRUE)
+samples <- setNames(samples_df[,2], samples_df[,1])
+```
+
+Below, we have written a function in R. 
+This function takes care of several important steps. 
+It allows us to avoid explicitly calling each processing step for each sample in the code. 
+For each row in the data frame of samples the function will:
+
+1. Read in the CellRanger results
+2. Make a Seurat object
+3. Rename the cells to make them unique across samples
+4. Filter the cells using some preset cutoffs
+5. Subsample the data (to 800 cells per sample) so that our processing steps run more quickly later on. Note: **you should not do this last step in your own analysis** (we are only doing it to make things run faster for demonstration purposes).
+
+First we define the function, and then we call it for each row in the sample data frame using `apply()`. 
+We end up with a list of Seurat objects.
+
+```{r read_data}
+# Define function
+get_cell_sample <- function(n, cells=800){
+  names(n) <- NULL
+  print(n[1])
+  # Read in 10X results
+  data <- Read10X(data.dir = n[2])
+  # Create a Seurat object
+  so <- CreateSeuratObject(counts = data, project=n[1])
+  # Rename the cells
+  so <- RenameCells(so, add.cell.id = n[1])
+  # Identify percentage of mitochondrial reads in each cell
+  so[["percent.mt"]] <- PercentageFeatureSet(so, pattern = "^MT-")
+  # filter the cells 
+  so <- subset(so, 
+               subset = nFeature_RNA > 500 & nFeature_RNA < 5000 & percent.mt < 10)
+  # Subsample the filtered cells to reduce dataset size 
+  # Do not subsample YOUR data like this - for demonstration purposes only!
+  so800 <- so[, sample(colnames(so), size = cells, replace=F)]
+}
+
+# Call sampling function
+subsample_list <- apply(samples_df, 1, get_cell_sample)
+
+# Rename list of objects
+names(subsample_list) <- samples_df$name
+```
+
+We then **merge the datasets** without batch correction and **normalise the counts** using scTransform:
+
+```{r merge, message=FALSE, warning=FALSE, results=FALSE}
+all_merge <- merge(subsample_list[[1]],
+                   y = subsample_list[2:7],
+                   add.cell.ids = c("E_1", "E_2", "E_3", 
+                                    "E_4", "PBMMC_1", "PBMMC_2", 
+                                    "PBMMC_3"), 
+                   project = "PBMMC")
+
+# Normalise the data, do linear dimension reduction
+all_merge <- SCTransform(all_merge, vars.to.regress = "percent.mt", variable.features.n = 3000)
+all_merge <- RunPCA(all_merge, npcs = 30, verbose = FALSE)
+```
+
+We check the PC variance plot: 
+
+```{r check_pcs}
+ElbowPlot(all_merge)
+```
+
+18 PCs looks like a reasonable cut off (we could go even higher, to make sure we retain as much biological variance as possible). 
+
+```{r nonlinear, message=FALSE, warning=FALSE, results=FALSE}
+all_merge <- RunUMAP(all_merge, reduction = "pca", dims = 1:18)
+
+DimPlot(all_merge, reduction = "umap", group.by="orig.ident")
+```
+
+The PBMMC datasets cluster reasonably well, but appear to have moderate batch effects. 
+However each ETV6_RUNX1 dataset is largely disconnected from each other dataset. 
+If this is really how things are, then we have no way to differentiate batch effects from real biological differences.
+
+However, it is reasonable to assume that ETV6_RUNX1 should share cell types/states with the other datasets. 
+Therefore, we will correct the data for batch effects, assuming that there are a decent number of cells in each dataset which are similar and can be used to anchor the datasets to each other.
+
+
+## Batch correction
+
+When Seurat integrates the data it does so in a pairwise fashion. 
+It looks for two similar datasets, and integrates these, then combines the result of that integration with another dataset. 
+Because the uncorrected datasets are quite different from each other, we will specify the order in which this pairwise integration should happen. 
+Specifically we will merge the "ETV6_RUNX1" datasets with each other, merge the PBMMC datasets with each other and then merge the two sample types at the end. 
+This is specified with the `sample.tree` argument to the `IntegrateData()` function. 
+If you want to understand what the apprently random string of numbers means, look at the function's documentation.
+
+N.b. this takes a while to run!
+
+```{r batch_correct, message=FALSE, warning=FALSE, results=FALSE}
+# Normalise each sample
+call_list <- lapply(X = subsample_list, FUN = function(x) {
+  x <- SCTransform(x,  verbose = TRUE, variable.features.n = 1000)
+})
+
+# Select features for integration
+call_features <- SelectIntegrationFeatures(object.list = call_list, 
+                                           nfeatures=1000)
+
+# Perform integration - this step takes a while!!!
+call_anchors <- FindIntegrationAnchors(object.list = call_list, 
+                                       anchor.features = call_features)
+
+# this is for all PBMMC and ETV6 samples
+call_int <- IntegrateData(anchorset = call_anchors, 
+                          normalization.method = "SCT", 
+                          sample.tree = matrix(c(-1, 1, 2, -5, 4, 3, -2, -3, -4, -6, -7, 5), ncol = 2))
+
+call_int
+```
+
+We now normalise the integrated data and run our dimensionality reduction on the integrated values.
+Note that the default assay has been changed to the "integrated" (batch-corrected) matrix. 
+We want to make sure to be using this assay for this analysis. 
+
+```{r normalise}
+# check default assay
+DefaultAssay(call_int)
+
+# scale the integrated datasets to normalise them
+call_int <- ScaleData(call_int, verbose = FALSE)
+
+# run PCA
+call_int <- RunPCA(call_int, npcs = 20, verbose = FALSE)
+
+# check the elbow plot again
+ElbowPlot(call_int)
+```
+
+Finally, we run our UMAP projection again:
+
+```{r}
+# UMAP
+call_int <- RunUMAP(call_int, reduction = "pca", dims = 1:10, n.neighbors=10)
+
+DimPlot(call_int, reduction = "umap", group.by="orig.ident")
+```
+
+The overlap between datasets is now very good. 
+We have a large cluster containing all datasets and the individual "EVT6_RUNX1" datasets are well integrated with the PBMMC cells.
+
+
+## Identifying cell types
+
+A key part of any single-cell RNA-seq analysis is determining what cell types each cluster represents. 
+Here we will identify clusters, then use markers for cell types we are expecting to determine what cell types are in each cluster. 
+Finally we will use markers derived from the data to identify clusters we are not sure about.
+
+Let's call clusters in the data:
+
+```{r call_clusters}
+# make sure we are still using the integrated assay
+DefaultAssay(call_int) <- 'integrated'
+
+# build the nearest-neighbour graph and do clustering on it
+call_int <- FindNeighbors(call_int, dims = 1:10)
+call_int <- FindClusters(call_int, resolution = 0.3, algorithm=2)
+
+# visualise it
+DimPlot(call_int, reduction = "umap", label = TRUE)
+```
+
+We have our clusters, now let's look at where our markers of interest are expressed.
+Based on published data, we know that:
+
+- B cells express _CD79A_
+- CD20+ B cells express _MS4A1_
+- Monocytes express _CST3_
+- Immature hematopoietic cells express _SPN_
+- Red blood cells express _HBA1_
+- T cells express _CD3D_
+
+The batch-corrected read counts are not suitable for looking at gene expression. 
+Therefore we will use the SCT-normalised data when examining marker expression.
+
+```{r plot_features}
+# change default assay
+DefaultAssay(call_int) <- "SCT"
+
+# Make a vector of gene names for the markers we know about
+# Let's pretend we don't know about NKT cell markers here
+features <- c("CD79A", "MS4A1", "CST3", "SPN", "HBA1", "CD3D")
+
+# Plot the expression values of each markers on the UMAP
+FeaturePlot(call_int, features = features, pt.size = 0.1, label = TRUE)
+
+# Draw violin plots of the distribution of expression values
+# for each marker in each cluster 
+VlnPlot(call_int, features = features)
+```
+
+We can see that clusters 0, 1, 3, 5 and 7 all express _CD79A_ and are therefore likely B cells. 
+Cluster 3 represents the CD20+ B cells because these cells also express _MS4A1_. 
+Cluster 1 and 7 also express _SPN_ and so are likely to be immature hematopoietic cells, presumably immature B cells. 
+Cluster 2 and 8 express _CD3D_ and so we can label these as T cells. 
+Cluster 6 expresses _CST3_ and so is probably monocytes.
+
+
+## Cluster marker genes
+
+Cluster 8 looks to comprise T cells, but what makes them distinct from the other cluster of T cells, cluster 2? 
+Let's determine markers of cluster 8, by looking for genes which are more highly expressed in this cluster than other clusters.
+
+```{r cluster8_markers}
+# When working with merged datasets, first we need to run this
+call_int <- PrepSCTFindMarkers(call_int)
+
+# now find markers for cluster 8
+c8_markers <- FindMarkers(call_int, ident.1 = 8)
+
+head(c8_markers)
+```
+
+Now we will plot expression for first few markers on the UMAP plot to check that they really are good markers for cluster 8. 
+
+```{r feature_plot}
+# look at the top 6 of these markers
+FeaturePlot(call_int, 
+            reduction = "umap",
+            features = rownames(head(c8_markers)), 
+            pt.size = 0.1)
+```
+
+They look good and very specific to this cluster.
+
+Go to the [Human Protein Atlas](https://www.proteinatlas.org/) to find out what sort of cells express these genes. 
+Put the name of one of the genes in the search bar, click "Search", then select the "single cell" data column next to the gene of interest.
+
+When there are a lot of clusters that you are not sure about, it is helpful to show a couple of markers for each cluster, like this:
+
+```{r markers_all, message=FALSE, warning=FALSE, results=FALSE}
+# find specific markers for all clusters
+call_markers_all <- FindAllMarkers(call_int, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+
+# get the top 2 hits for each cluster
+call_markers_all %>%
+  group_by(cluster) %>%
+  slice_max(n = 2, order_by = avg_log2FC)
+```
+
+You may have noticed that the monocyte marker _CST3_ was expressed in some cells from the B cell clusters. 
+Which samples was this in?
+
+```{r markers_etv6}
+# UMAP for ETV6 samples only
+FeaturePlot(subset(call_int, orig.ident %in% c("ETV6_RUNX1_1", "ETV6_RUNX1_2", "ETV6_RUNX1_3", "ETV6_RUNX1_4")), 
+            features=c('CST3', 'CD79A', 'HBA1', 'SPN'), reduction="umap")
+
+# UMAP for PBMMC samples only
+FeaturePlot(subset(call_int, orig.ident %in% c("PBMMC_1", "PBMMC_2", "PBMMC_3")), 
+            features=c('CST3', 'CD79A', 'HBA1', 'SPN'), reduction="umap")
+```
+
+The ETV6_RUNX1 cALL samples do not have cells in the B cell cluster which express much CST3. 
+PBMMCs seem to have a separate immature (SPN+) population within the larger B cell cluster, which does not express the canonical B cell marker _CD79A_ and which does express the monocyte marker _CST3_. 
+This warrants further investigation, which we unfortunately don't have time for here. 
+You could try doing a web search for "B cells expressing _CST3_" and see if this sort of thing has been observed before.
+
+There seems to be some _HBA1_ expressed across several cell clusters in some samples. 
+_HBA1_ is a common component of the "soup" or ambient RNA in scRNA-seq experiments involving blood cells. 
+Hemoglobin chains, such as _HBA1_, are very highly expressed in red blood cells and burst red blood cells will contribute their RNA to the medium from which the cells are loaded into the 10X Chromium machine. 
+Some of this medium, or "soup", containing ambient RNA is captured with each cell. 
+There are methods available to correct for soup in your analysis such as [SoupX](https://academic.oup.com/gigascience/article/9/12/giaa151/6049831).
+
+Now we will add more meaningful cluster labels to make our analysis more pleasingly biological
+
+```{r add_labels}
+# Define labels
+new_cluster_ids <- c("B1", "B2", "T cells", "CD20 B", "Erythrocytes",
+                     "B3", "Monocytes", "B4", "NKT")
+names(new_cluster_ids) <- levels(call_int)
+
+# Add labels to the Seurat object
+call_int <- RenameIdents(call_int, new_cluster_ids)
+
+# UMAP plot with new labels
+DimPlot(call_int, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
+```
+
+Now let's look at how each cell type is distributed across the different samples.
+
+```{r cluster_membership}
+table(Cluster = call_int@active.ident, Batch = call_int$orig.ident)
+```
+
+We can see that some cell types are barely present in some sample types. 
+Monocytes are largely from the healthy PBMMC samples. 
+Other cell, such as B cells of each type are well represented in all samples. 
+Others still are variable within sample types. 
+Erythrocytes are much more common in some PBMMC samples than others, suggesting variation in preparation.
+
+
+## Differentially expressed genes between samples
+
+Now that we have our annotated cell clusters, we can ask questions about differences between samples across the cell types we identified. 
+
+To run differential expression, we make use of "corrected counts" that are stored in the data slot of the the SCT assay. 
+Corrected counts are obtained by setting the sequencing depth for all the cells to a fixed value and reversing the learned regularized negative-binomial regression model. 
+
+First we make a `cell_labels` meta data column of the annotation, which will be useful to use for the differential expression:
+
+```{r cell_labels}
+# add cell labels to the metadata column
+call_int[['cell_labels']] <- call_int@active.ident
+```
+
+Now we can run the `FindMarkers()` function, but this time using the "SCT" assay:
+
+```{r run_de}
+ERTV6_1_vs_2.markers <- FindMarkers(call_int, 
+                                    assay = "SCT", 
+                                    ident.1 = "ETV6_RUNX1_1", 
+                                    ident.2 = "ETV6_RUNX1_2", 
+                                    group.by="orig.ident", 
+                                    min.pct = 0.5)
+
+head(ERTV6_1_vs_2.markers)
+```
+
+Amongst these genes, which are variable between two individuals we see ribosomal genes (with names starting RPS or RPL) and FOS as mentioned in the original Caron et al. paper.
+
+Now set the default idents back to sample name, rather than cell type labels so that we can use them to plot features for particular samples within the data:
+
+```{r view_fos}
+call_int <- SetIdent(call_int, value = 'orig.ident')
+f1 <- FeaturePlot(subset(call_int, idents= c("ETV6_RUNX1_1")), features = c("FOS"))
+f2 <- FeaturePlot(subset(call_int, idents= c("ETV6_RUNX1_2")), features = c("FOS"))
+f1 + f2
+```
+
+We see higher expression of _FOS_ in ETV6_RUNX1_2 across many cells.
+
