@@ -1,0 +1,469 @@
+---
+title: "Introduction to single-cell RNA-seq analysis using Seurat - Part 1"
+author: "Adam Reid, Gurdon Institute, University of Cambridge"
+date: '2023-01-09'
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "../course_files/")
+```
+
+# QC, normalisation and batch correction
+
+## Introduction
+
+The aim of these materials is to demonstrate how to use the Seurat R package to process scRNA-seq data. 
+They have been designed as a supplement to the [Introduction to Single-cell RNA-seq Analysis course](https://bioinformatics-core-shared-training.github.io/SingleCell_RNASeq_Sept22/) developed by University of Cambridge/CRUK. 
+Here we use the same dataset and follow the same general steps, but using Seurat as an alternative to the Bioconductor packages used in the main course.
+
+## Dataset
+
+We will be using data from [Caron et al. 2020](https://www.nature.com/articles/s41598-020-64929-x). 
+Some context for this dataset is given in their introduction: 
+
+> Childhood acute lymphoblastic leukemia (cALL) is the most common pediatric cancer. It is characterized by bone marrow lymphoid precursors that acquire genetic alterations, resulting in disrupted maturation and uncontrollable proliferation. Nowaways, up to 85–90% of patients are cured, but others do not respond to treatment or relapse and die. The aim of the study is to characterise the heterogeneity of gene expression at the cell level, within and between patients. Precursor B cell ALL (B-ALL) represents ~85% of cases of cALL and precursor T cell ALL (T-ALL) ~15%, which can be further subdivided into more than a dozen molecular subtypes. The high hyper diploid cases (HHD) and those harbouring the t(12;21) [_ETV6/RUNX1_] rearrangement represent about ~60% of B-ALL cases and are associated with a good prognosis. Other less frequent (<10%) subtypes, such as KMT2A-rearranged, t(9;22) [BCR/ABL1] or T-ALL are associated with less favourable outcomes.
+
+Caron et al. loaded thawed PBMMCs onto a 10X Genomics Chromium single cell platform (v2 chemistry). 
+They aimed for 3,000 cells per sample and targeted 100,000 reads per cell by sequencing each sample on one lane of an Illumina HiSeq 4000 high-throughput sequencer (2x98 b.p. paired-end sequencing). 
+They generated single cell gene expression data from 39,375 pediatric bone marrow mononuclear cells (PBMMCs) from eight cALL patients of common subtypes. 
+Thus we have cells collected from four patients with ETV6/RUNX1 rearrangements, two HHD cases and two T-ALL cases. 
+There are also PBMMCs from 3 healthy donors.
+
+In the original paper they examined transcriptional variation within and between the cancers of different patients. 
+Similarly, by the end of this tutorial we will have:
+
+* Performed QC, normalisation and batch correction on the data.
+* Identified the cell types in the different samples (see [part 2](101-seurat_part2.html)).
+<!-- * Determined genes which vary in expression between patients -->
+
+
+## Reading in the data
+
+We start the analysis by **loading the necessary packages**:
+
+```{r libraries, message=FALSE}
+library(Seurat)
+library(sctransform)
+
+# set seed for randomisation (e.g. UMAP dimension reduction)
+set.seed = 123
+```
+
+We then **read the data in**, using a dedicated function that reads `cellranger` output. 
+We will read in one sample from each sample type for demonstration purposes:
+
+```{r load, message=FALSE}
+ETV6_RUNX1_1.data <- Read10X(data.dir = "Data/CellRanger_Outputs/SRR9264343/outs/filtered_feature_bc_matrix/")
+
+HHD_1.data <- Read10X(data.dir = "Data/CellRanger_Outputs/SRR9264347/outs/filtered_feature_bc_matrix/")
+
+PRE_T_1.data <- Read10X(data.dir = "Data/CellRanger_Outputs/SRR9264349/outs/filtered_feature_bc_matrix/")
+
+PBMMC_1.data <- Read10X(data.dir = "Data/CellRanger_Outputs/SRR9264351/outs/filtered_feature_bc_matrix/")
+```
+
+This imports the matrix of counts into objects of class `dgCMatrix`. 
+We can use these to **make Seurat objects** for each dataset, which is what we will use in the analysis:
+
+```{r make_objects}
+ETV6_RUNX1_1 <- CreateSeuratObject(counts = ETV6_RUNX1_1.data, project = "ETV6_RUNX1_1")
+HHD_1 <- CreateSeuratObject(counts = HHD_1.data, project = "HHD_1")
+PRE_T_1 <- CreateSeuratObject(counts = PRE_T_1.data, project = "PRE_T_1")
+PBMMC_1 <- CreateSeuratObject(counts = PBMMC_1.data, project = "PBMMC_1")
+```
+
+We can then **merge the Seurat objects**, storing all information in a single object for ease of use. 
+We will name our Seurat object `call` as in cALL - childhood Acute Lymphoblastic Leukemia.
+
+```{r merge_objects}
+call <- merge(ETV6_RUNX1_1, 
+              y = c(HHD_1, PRE_T_1, PBMMC_1), 
+              add.cell.ids = c("E1", "H1", "PT1", "PB1"), 
+              project = "cALL")
+```
+
+This is the Seurat object with the datasets combined
+
+```{r examine}
+call
+```
+
+### The Seurat Object
+
+There are two important components of the Seurat object to be aware of: 
+
+- The **`@meta.data` slot**, which stores metadata for our droplets/cells (e.g. which batch of samples they belong to, total counts, total number of detected genes, etc.). 
+- The **`@assays` slot**, which stores the matrix of raw counts, as well as (further down) matrices of normalised/transformed data. 
+
+Starting with our **metadata slot**:
+
+```{r meta}
+head(call@meta.data)
+```
+
+We can see that the droplet/cell ids, given in the rownames of this table, have prefixes added (based on the `add.cell.ids` option we used above with the `merge()` function).
+The "orig.ident" has the sample names we also specified earlier. 
+And we can see that Seurat automatically calculated total UMI counts (`nCount_RNA`) and the total number of detected genes (`nFeature_RNA`) in each droplet.
+
+Moving on to the **assays slot**, we can see that it currently contains just the count data, called `$RNA`. 
+Normalised data of different sorts will also get stored here.
+
+```{r assays}
+call@assays
+```
+
+Being aware of the **active assay** is important when doing different types of analysis because tools will try to use the active assay by default if they can. 
+Note that normally raw counts (the RNA assay) are used for differential expression e.g. calling markers. 
+Conversely, normalised data is used to identify cell types e.g. in drawing UMAP plots.
+Here, we start by defining our default assay to the raw counts, using the `DefaultAssay()` function:
+
+```{r default}
+DefaultAssay(call) <- 'RNA'
+call@active.assay
+```
+
+
+## Quality Control
+
+We have already seen some useful stats for QC e.g. feature counts. 
+In addition, the number of reads mapping to mitochondrial genes is useful because high numbers are indicative of poor quality cells.
+
+Another simple metric that we can quickly calculate is the **number of genes detected** in the whole dataset (i.e. those that are true for this statement):
+
+```{r genes_detected}
+table(rowSums(call@assays$RNA) > 0)
+```
+
+
+### % Mitocondrial Reads
+
+One of the basic quality metrics used for filtering cells is the percentage of reads mapping to the mitochondrial genome.
+A high level of reads from a particular cell mapping to mitochondrial genes is indictative of poor a quality transcriptome from that cell. 
+In particular this may be a cell which has been caused to initiate apoptosis during the processing steps of the experiment. 
+To get these numbers we can take advantage of the fact that (in human) all mitochondrial gene names start with the 'MT-' prefix. 
+This is probably not the case for your non-human species of interest, although for mouse it is usually 'Mt'.
+
+The following command will add the percent of reads mapping to mitochondrial genes to the meta data.
+
+```{r mt}
+call[["percent.mt"]] <- PercentageFeatureSet(call, pattern = "^MT-")
+
+head(call@meta.data)
+```
+
+### Visualising Counts
+
+We can use the `VlnPlot()` function to visualise data stored in our metadata slot. 
+This function will generate violin plots with samples on the x-axis and the variable of interest on the y-axis.
+
+For example, to plot raw counts per sample:
+
+```{r ncount, echo=FALSE}
+# using log scale due to the high skewness of raw count data
+VlnPlot(call, features = c("nCount_RNA"), log=TRUE)
+```
+
+And total features per sample:
+
+```{r nfeature, echo=FALSE}
+VlnPlot(call, features = c("nFeature_RNA"))
+```
+
+And the percentage of mitochondrial reads per sample:
+
+```{r percent_mt, echo=FALSE}
+VlnPlot(call, features = c("percent.mt"))
+```
+
+We can see that the different samples differ quite a lot in terms of the distributions of these statistics. 
+Why might that be?
+
+
+## Filtering cells
+
+The simplest way to filter out cells is with hard cutoffs across all samples. 
+However, it may be preferable to use different cutoffs on different samples (because different samples may have been sequenced to different depths).
+
+Let's look at the relationships between the QC metrics:
+
+```{r qc_scatter, echo=FALSE}
+FeatureScatter(call, feature1 = "nCount_RNA", feature2 = "percent.mt")
+```
+
+Those cells with high percent.mt also tend to have low read counts, extra evidence that these are low quality cells which will not be useful for our analysis. 
+
+```{r}
+FeatureScatter(call, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+```
+
+Read count is well correlated with feature count. 
+This is what we would expect. 
+If there were cells with lots of reads but few features this would suggest problems with the capture of diverse RNA molecules in those cells.
+
+Based on this exploration, we will pick some thresholds to remove the most outlying droplets: with greater than 200 and less than 6000 detected features. 
+This excludes poor quality cells with little data and potential doublets which have more features than we expect to see in the cells. 
+We will also exclude droplets with less than 10% mitochondrial reads, which should exclude cells undergoing apoptosis. 
+
+We might want to come back and adjust these cut offs once we have seen the UMAP plots. 
+It may be that we still get clusters of low quality cells that should have been removed. 
+Better to be cautious to begin with, to avoid filtering out unusual cell types.
+
+```{r filter}
+# define condition for filtering
+cells_to_filter <- rownames(subset(call, subset = nFeature_RNA > 200 & nFeature_RNA < 6000 & percent.mt < 10)@meta.data)
+# add this information to the metadata
+call$keep <- rownames(call@meta.data) %in% cells_to_filter
+```
+
+We can quickly tabulate **how many cells we are keeping**:
+
+```{r keeping}
+table(call$keep)
+```
+
+Let's look back at our distribution plots, highlighting the cells that we are retaining and filtering. 
+
+```{r keep_violins, message=FALSE}
+VlnPlot(call, features = c("nCount_RNA"), log=TRUE, split.by="keep")
+VlnPlot(call, features = c("nFeature_RNA"), split.by="keep")
+VlnPlot(call, features = c("percent.mt"), split.by="keep")
+```
+
+Once we are happy with the filtering, we can **remove the low quality cells from the Seurat object**. 
+Note that features here are genes and samples are cells.
+
+```{r finalfilter}
+call <- subset(call, subset = keep)
+call
+```
+
+
+## Normalisation
+
+The algorithm scTransform has been shown to improve normalisation over simpler methods. 
+Furthermore, it does normalisation, scaling and finding variable features in one step. 
+
+```{r sctransform, message=FALSE, warning=FALSE, results=FALSE}
+call <- SCTransform(call, 
+                    vars.to.regress = "percent.mt", 
+                    variable.features.n = 3000)
+```
+
+The normalised data are now under $SCT in the assay slot:
+
+```{r sct_assay}
+call@assays
+```
+
+
+## Dimensionality reduction
+
+### Variable features
+
+Let's have a look at the variable features (genes). 
+Do you recognise any of them? 
+
+```{r variable_genes, message=FALSE}
+top10 <- head(VariableFeatures(call), 10)
+plot1 <- VariableFeaturePlot(call)
+LabelPoints(plot = plot1, points = top10, repel = TRUE)
+```
+
+### Linear dimension reduction (PCA)
+
+We do linear dimension reduction (PCA) to determine the principal components of variation in the data. 
+Note the genes associated with the first 5 PCs. 
+Is there anything noticeable about them? 
+If there are recognisable groups of genes associated with a particular PC this likely represents a strong biological signals (the most distinct cell type, variation in cell cycle stage, or a technical problem (low quality cells).
+
+```{r pca}
+call <- RunPCA(call, features = VariableFeatures(object = call))
+```
+
+The result of the PCA is stored in the **reductions slot**, here as `$pca`:
+
+```{r examine_pca_slot}
+call@reductions
+```
+
+We can **plot the first two principal components** using the `DimPlot()` function.
+What do you notice about the different samples on the PCA plot? 
+
+```{r plot_pca}
+DimPlot(call, reduction = "pca", group.by="orig.ident")
+```
+
+### Number of components for UMAP
+
+We need to pick a number of PCs which capture most of the variance in the data. 
+These will be used to generate a UMAP plot. 
+How many PCs should we use to describe the data? 
+This plot shows how much variance is captured by each PC.
+
+```{r elbow_plot}
+ElbowPlot(call)
+```
+
+A large proportion of the variation is captured by 16 components and there is a drop off thereafter. 
+Let's go with 16.
+
+### Non-linear dimension reduction - UMAP
+
+Non-linear dimension reduction methods such as UMAP and TSNE take the PCA data as a starting point, but are able to take more complex (non-linear) patterns hidden in the data and represent them in only two dimensions (which humans are good at examining).
+
+```{r run_umap, message=FALSE}
+call <- RunUMAP(call, dims = 1:16)
+DimPlot(call, group.by="orig.ident")
+```
+
+There is a strong batch effect. 
+Most of the cells separate based on the sample. 
+If the cells really are this different between samples it makes it difficult (perhaps impossible) to compare the same cell types between the datasets and differentiate technical differences from biological differences. 
+We need to do "batch correction" to better integrate the data before further analysis.
+
+If we plot the expression of the B cell marker CD79A (below), we can see that there are several distinct B cell clusters. 
+These could be distinct types of B cell, but if this were true and ETV6_RUNX1_1 (red cells in plot above) has no cells comparable to the other datasets, then we simply can't compare them.
+
+```{r b_cell_marker}
+FeaturePlot(call, reduction = "umap", features = c('CD79A'))
+```
+
+
+## Batch Correction
+
+As an example of batch correction, we will start with two technical replicates. 
+One is the PBMMC_1 sample that we have already seen (PBMMC1a), the other is a technical replicate derived from the same sample material (PBMMC1b). 
+Whilst the two samples come from distinct 10X runs, they are derived from the same starting material and therefore, if there was no batch effect, they should be close to identical.
+
+Here we will use the integration and batch correction approach outlined in [Stuart et al.](https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8).
+
+### Read data
+
+As we did before, we start by reading the count matrices from `cellranger` and create Seurat objects from them:
+
+```{r read_pbmmc, message = FALSE}
+# PBMMC_1a = SRR9264351
+PBMMC_1a.data <- Read10X(data.dir = "Data/CellRanger_Outputs/SRR9264351/outs/filtered_feature_bc_matrix/")
+PBMMC_1a <- CreateSeuratObject(counts = PBMMC_1a.data, project = "PBMMC_1a")
+
+# PBMMC_1b = SRR9264352
+PBMMC_1b.data <- Read10X(data.dir = "Data/CellRanger_Outputs/SRR9264352/outs/filtered_feature_bc_matrix/")
+PBMMC_1b <- CreateSeuratObject(counts = PBMMC_1b.data, project = "PBMMC_1b")
+```
+
+### Merge, normalise and do dimension reduction
+
+Next, we merge our datasets (without batch correction) and see whether there is a batch effect using PCA + UMAP:
+
+```{r merg_norm, message=FALSE, warning=FALSE, results=FALSE}
+PBMMC_merge <- merge(PBMMC_1a, y = c(PBMMC_1b), 
+              add.cell.ids = c("PB1a", "PB1b"), project = "PBMMC")
+
+# Normalise the data, do dimension reduction
+PBMMC_merge <- SCTransform(PBMMC_merge, verbose = TRUE, variable.features.n = 3000)
+PBMMC_merge <- RunPCA(PBMMC_merge, npcs = 30, verbose = FALSE)
+PBMMC_merge <- RunUMAP(PBMMC_merge, reduction = "pca", dims = 1:30)
+```
+
+Looking at our UMAP, we can see that the technical replicates cluster together but clearly don't overlap well. 
+
+```{r plot_tech_merge}
+DimPlot(PBMMC_merge, reduction = "umap", group.by="orig.ident")
+```
+
+So, there seems to be a batch effect, but will it affect the results?
+
+### Clustering of un-corrected cells
+
+Let's call clusters and see how the replicates are distributed in the them. 
+If there are clusters with lots of one replicate and little of the other, this suggests that these clusters are driven by technical variation, which ought to be removed before analysis.
+
+The clustering is done in two steps: generate a nearest-neighbours graph; call clusters (or "communities") on this graph. 
+
+```{r tech_cluster, message=FALSE}
+PBMMC_merge <- FindNeighbors(PBMMC_merge, dims = 1:30)
+PBMMC_merge <- FindClusters(PBMMC_merge, resolution = 0.5)
+
+table(Cluster = PBMMC_merge$SCT_snn_res.0.5, Batch = PBMMC_merge$orig.ident)
+```
+
+By tabulating how many cells from each technical replicate fall in each cluster, we can see that some clusters have almost none of one replicate and lots of the other.
+If we proceeded with the uncorrected data in our downstream analysis, it might lead us to conclude that there are biological differences between our samples, which in this case we know should really be identical.
+
+### Data Integration
+
+We can perform batch correction by using a method of _data integration_ implemented in Seurat, which aims to bring cells of different samples closer together (while retaining as much of the biological variance as possible). 
+
+Firstly, we normalize and identify variable features for each dataset independently and make a list of the normalised Seurat objects
+
+```{r tech_norm, message=FALSE}
+# loop through the two samples
+pbmmc_list <- lapply(c(PBMMC_1a, PBMMC_1b), function(x) {
+  x <- NormalizeData(x)
+  x <- FindVariableFeatures(x, selection.method = "vst", nfeatures = 2000)
+})
+```
+
+Then, we select features that are repeatedly variable across datasets which can be used for for integration. 
+We are using a high value here (10000 features). 
+You could try varying this to see if using fewer features affects the results.
+
+```{r tech_feat, message=FALSE}
+features <- SelectIntegrationFeatures(object.list = pbmmc_list, nfeatures=10000)
+```
+
+Perform the integration
+
+```{r tech_integrate, message=FALSE}
+pbmmc_anchors <- FindIntegrationAnchors(object.list = pbmmc_list, anchor.features = features)
+pbmmc_combined <- IntegrateData(anchorset = pbmmc_anchors)
+```
+
+We now have an 'integrated' assay, as well as the standard 'RNA' assay.
+
+```{r tech_show_assays}
+pbmmc_combined@assays
+```
+
+### Analysis on corrected cells
+
+To proceed with the corrected data, we need to change our default assay. 
+Note that the original unmodified data still resides in the 'RNA' assay.
+
+```{r tech_assay}
+DefaultAssay(pbmmc_combined) <- "integrated"
+```
+
+Run the standard workflow for visualization and clustering:
+
+```{r tech_scale, message=FALSE}
+pbmmc_combined <- ScaleData(pbmmc_combined, verbose = FALSE)
+pbmmc_combined <- RunPCA(pbmmc_combined, npcs = 30, verbose = FALSE)
+pbmmc_combined <- RunUMAP(pbmmc_combined, reduction = "pca", dims = 1:30)
+```
+
+Finally we are ready to **visualise the corrected cells**.
+The data look much better integrated, with a lot of overlapping between the different samples within clusters.
+
+```{r tech_viz}
+DimPlot(pbmmc_combined, reduction = "umap", group.by = "orig.ident")
+```
+
+We can move on to **identify clusters of corrected cells** and see how the replicates are distributed:
+
+```{r tech_cluster_cor}
+pbmmc_combined <- FindNeighbors(pbmmc_combined, dims = 1:30)
+pbmmc_combined <- FindClusters(pbmmc_combined, resolution = 0.8)
+table(Cluster = pbmmc_combined$integrated_snn_res.0.8, Batch = pbmmc_combined$orig.ident)
+```
+
+We can see that the clusters contain much more similar numbers of cells from each replicate than we had before. 
+We can therefore that the data integration step helped to mitigate major batch effects in the data.
+
+We are ready to move on to our [downstream analysis in part 2](101-seurat_part2.html).
