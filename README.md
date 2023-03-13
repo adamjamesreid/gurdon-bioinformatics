@@ -16,6 +16,7 @@ Ankit Verma - Bioinformatician
 
 [Bioinformatics on the cluster](docs/bioinf_cluster.md)
 
+[Gurdon scRNA-seq workshop](docs/scrnaseq_workshop.md)
 
 <hr>  
 
