@@ -25,7 +25,7 @@ Much of this material has been remixed from training materials developed by Univ
 
 ## Contents
 
-*[Day 1 – Tuesday March 21st (9am-5pm)](101-seurat_part1.Rmd)*
+*[Day 1 – Tuesday March 21st (9am-5pm)](101-seurat_part1.html)*
 
 Level 1 meeting room
 
