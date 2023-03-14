@@ -51,7 +51,7 @@ Please note that: these data have been processed for teaching purposes and are t
 
 You can download the data from DropBox [here](https://www.dropbox.com/sh/s79ttds7px190xu/AAAjHzirFkfik1i08Gh26uU_a?dl=0).
 
-n.b. the file is 4.2GB compressed and XXGB when uncompressed, so make sure you have enough space on your computer.
+n.b. the file needs to be unzipped and is ~2.6GB, so make sure you have enough space on your computer.
 
 Where these data are stored on your computer will affect some of the commands in the exercises!
 
