@@ -29,9 +29,7 @@ To use the course materials you will need the following set up on your computer
 
 ### Install R and RStudio
 
-If you do not already have R and Rstudio installed, follow the instructions here:
-
-https://posit.co/download/rstudio-desktop/
+If you do not already have R and Rstudio installed, follow the instructions [here](https://posit.co/download/rstudio-desktop/).
 
 ### Install R packages
 
@@ -44,16 +42,18 @@ install.packages("tidyr")
 install.packages("dplyr")
 ```
 
-### Get data set
+### Get dataset
 
-The course data is based on ‘CaronBourque2020’ relating to pediatric leukemia, with four sample types, including:
-pediatric Bone Marrow Mononuclear Cells (PBMMCs)
-three tumour types: ETV6-RUNX1, HHD, PRE-T
- Please note that:
-these data have been processed for teaching purposes and are therefore not suitable for research use.
+The course data is based on [Caron et al., 2020](https://www.nature.com/articles/s41598-020-64929-x), a study on pediatric leukemia, with four sample types, including
+normal pediatric Bone Marrow Mononuclear Cells (PBMMCs) and three tumour types: ETV6-RUNX1, HHD and PRE-T.
+
+Please note that: these data have been processed for teaching purposes and are therefore not suitable for research use.
+
 You can download the data from DropBox [here](https://www.dropbox.com/sh/s79ttds7px190xu/AAAjHzirFkfik1i08Gh26uU_a?dl=0).
 
-n.b. the file is 4.2GB compressed and XXGB when uncompressed, so make sure you have enough space on your computer.
+n.b. the file needs to be unzipped and is ~2.6GB, so make sure you have enough space on your computer.
+
+Where these data are stored on your computer will affect some of the commands in the exercises!
 
 ## Contents
 
@@ -61,10 +61,11 @@ n.b. the file is 4.2GB compressed and XXGB when uncompressed, so make sure you h
 
 Level 1 meeting room
 
-- Check set up
+- Check set up (9am)
 - Introduction (slides)
 - Raw data processing (Demo)
 - Quality Control
+- **LUNCH 12.30pm-13.30pm**
 - Normalisation
 - Dimension reduction
 - Batch correction
@@ -74,9 +75,10 @@ Level 1 meeting room
 
 Level 3 meeting room
 
-- Introduction (slides)
+- Introduction 9am (slides)
 - Identifying cell types
 - Identifying differentially expressed genes
+- **LUNCH 12.30pm-13.30pm**
 - Working with your own data or public data of interest
   - Working with your own data is always harder than with the nice streamlined examples given in a workshop! We can help you get started with some data of specific interest to you.
 
