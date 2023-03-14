@@ -23,13 +23,47 @@ Much of this material has been remixed from training materials developed by Univ
 - Some knowledge of the R programming language - [try this tutorial](https://www.w3schools.com/r/r_intro.asp)
 - Most of the course involves a preprepared dataset, but towards the end we aim to work with your own data. If you do not have your own data, it would be useful to identify some public data of interest
 
+## Course set up
+
+To use the course materials you will need the following set up on your computer
+
+### Install R and RStudio
+
+If you do not already have R and Rstudio installed, follow the instructions here:
+
+https://posit.co/download/rstudio-desktop/
+
+### Install R packages
+
+Open R studio and, in the console, run:
+
+```
+install.packages('Seurat')
+install.packages("sctransform")
+install.packages("tidyr")
+install.packages("dplyr")
+```
+
+### Get data set
+
+The course data is based on ‘CaronBourque2020’ relating to pediatric leukemia, with four sample types, including:
+pediatric Bone Marrow Mononuclear Cells (PBMMCs)
+three tumour types: ETV6-RUNX1, HHD, PRE-T
+ Please note that:
+these data have been processed for teaching purposes and are therefore not suitable for research use.
+You can download the data from DropBox [here](https://www.dropbox.com/sh/s79ttds7px190xu/AAAjHzirFkfik1i08Gh26uU_a?dl=0).
+
+n.b. the file is 4.2GB compressed and XXGB when uncompressed, so make sure you have enough space on your computer.
+
 ## Contents
 
-*[Day 1 – Tuesday March 21st (9am-5pm)](101-seurat_part1.Rmd)*
+*[Day 1 – Tuesday March 21st (9am-5pm)](101-seurat_part1.html)*
 
 Level 1 meeting room
 
-- Raw data processing
+- Check set up
+- Introduction (slides)
+- Raw data processing (Demo)
 - Quality Control
 - Normalisation
 - Dimension reduction
@@ -40,7 +74,12 @@ Level 1 meeting room
 
 Level 3 meeting room
 
+- Introduction (slides)
 - Identifying cell types
 - Identifying differentially expressed genes
 - Working with your own data or public data of interest
   - Working with your own data is always harder than with the nice streamlined examples given in a workshop! We can help you get started with some data of specific interest to you.
+
+
+
+
