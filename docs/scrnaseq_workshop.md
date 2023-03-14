@@ -46,6 +46,14 @@ install.packages("dplyr")
 
 ### Get data set
 
+The course data is based on ‘CaronBourque2020’ relating to pediatric leukemia, with four sample types, including:
+pediatric Bone Marrow Mononuclear Cells (PBMMCs)
+three tumour types: ETV6-RUNX1, HHD, PRE-T
+ Please note that:
+these data have been processed for teaching purposes and are therefore not suitable for research use.
+You can download the data from DropBox [here](https://www.dropbox.com/sh/s79ttds7px190xu/AAAjHzirFkfik1i08Gh26uU_a?dl=0).
+
+n.b. the file is 4.2GB compressed and XXGB when uncompressed, so make sure you have enough space on your computer.
 
 ## Contents
 
@@ -53,6 +61,7 @@ install.packages("dplyr")
 
 Level 1 meeting room
 
+- Check set up
 - Introduction (slides)
 - Raw data processing (Demo)
 - Quality Control
@@ -71,12 +80,6 @@ Level 3 meeting room
 - Working with your own data or public data of interest
   - Working with your own data is always harder than with the nice streamlined examples given in a workshop! We can help you get started with some data of specific interest to you.
 
-## Dataset
 
-The course data is based on ‘CaronBourque2020’ relating to pediatric leukemia, with four sample types, including:
-pediatric Bone Marrow Mononuclear Cells (PBMMCs)
-three tumour types: ETV6-RUNX1, HHD, PRE-T
-The data used in the course can be downloaded from Dropbox (the file is 4.2GB compressed and XXGB when uncompressed, so make sure you have enough space on your computer). Please note that:
-these data have been processed for teaching purposes and are therefore not suitable for research use;
-all the data is provided on our training machines, you don’t need to download it to attend the course.
+
 
