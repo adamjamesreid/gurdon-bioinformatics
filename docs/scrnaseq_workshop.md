@@ -23,6 +23,30 @@ Much of this material has been remixed from training materials developed by Univ
 - Some knowledge of the R programming language - [try this tutorial](https://www.w3schools.com/r/r_intro.asp)
 - Most of the course involves a preprepared dataset, but towards the end we aim to work with your own data. If you do not have your own data, it would be useful to identify some public data of interest
 
+## Course set up
+
+To use the course materials you will need the following set up on your computer
+
+### Install R and RStudio
+
+If you do not already have R and Rstudio installed, follow the instructions here:
+
+https://posit.co/download/rstudio-desktop/
+
+### Install R packages
+
+Open R studio and, in the console, run:
+
+```
+install.packages('Seurat')
+install.packages("sctransform")
+install.packages("tidyr")
+install.packages("dplyr")
+```
+
+### Get data set
+
+
 ## Contents
 
 *[Day 1 – Tuesday March 21st (9am-5pm)](101-seurat_part1.html)*
