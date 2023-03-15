@@ -83,5 +83,13 @@ Level 3 meeting room
   - Working with your own data is always harder than with the nice streamlined examples given in a workshop! We can help you get started with some data of specific interest to you.
 
 
+## Acknowledgements
 
+Much of this material has been remixed from training materials developed by University of Cambridge Bioinformatics Training Facility course on [Analysis of scRNA-seq data](https://training.csx.cam.ac.uk/bioinformatics/course/bioinfo-scRNAseq), Licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+
+A variety of people contributed to these, including:
+
+Abigail Edwards, Ashley D Sawle, Chandra Chilamakuri, Kamal Kishore, Stephane Ballereau, Zeynep Kalendar Atak, Hugo Tavares, Jon Price, Katarzyna Kania, Roderik Kortlever, Adam Reid, Tom Smith - Apologies if we have missed anyone!
+
+Much of the material in *that* course was derived from the demonstrations found in the [OSCA book](http://bioconductor.org/books/3.14/OSCA/) and the [Hemberg Group course materials](https://www.singlecellcourse.org/).
 
