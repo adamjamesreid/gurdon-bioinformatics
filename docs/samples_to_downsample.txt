@@ -1,0 +1,8 @@
+name,location
+ETV6_RUNX1_1,Data/CellRanger_Outputs/SRR9264343/outs/filtered_feature_bc_matrix
+ETV6_RUNX1_2,Data/CellRanger_Outputs/SRR9264344/outs/filtered_feature_bc_matrix
+ETV6_RUNX1_3,Data/CellRanger_Outputs/SRR9264345/outs/filtered_feature_bc_matrix
+ETV6_RUNX1_4,Data/CellRanger_Outputs/SRR9264346/outs/filtered_feature_bc_matrix
+PBMMC_1,Data/CellRanger_Outputs/SRR9264351/outs/filtered_feature_bc_matrix
+PBMMC_2,Data/CellRanger_Outputs/SRR9264353/outs/filtered_feature_bc_matrix
+PBMMC_3,Data/CellRanger_Outputs/SRR9264354/outs/filtered_feature_bc_matrix
