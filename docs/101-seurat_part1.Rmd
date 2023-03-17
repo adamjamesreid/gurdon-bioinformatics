@@ -1,18 +1,13 @@
 ---
 title: "Introduction to single-cell RNA-seq analysis using Seurat - Part 1"
 author: "Adam Reid, Gurdon Institute, University of Cambridge"
-date: '2023-01-09'
+date: '2023-03-17'
 output: 
   html_document:
     toc: true
     toc_float: true
     number_sections: true
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = "../course_files/")
-```
 
 # QC, normalisation and batch correction
 
@@ -164,20 +159,20 @@ This function will generate violin plots with samples on the x-axis and the vari
 
 For example, to plot raw counts per sample:
 
-```{r ncount, echo=FALSE}
+```{r ncount}
 # using log scale due to the high skewness of raw count data
 VlnPlot(call, features = c("nCount_RNA"), log=TRUE)
 ```
 
 And total features per sample:
 
-```{r nfeature, echo=FALSE}
+```{r nfeature}
 VlnPlot(call, features = c("nFeature_RNA"))
 ```
 
 And the percentage of mitochondrial reads per sample:
 
-```{r percent_mt, echo=FALSE}
+```{r percent_mt}
 VlnPlot(call, features = c("percent.mt"))
 ```
 
@@ -192,7 +187,7 @@ However, it may be preferable to use different cutoffs on different samples (bec
 
 Let's look at the relationships between the QC metrics:
 
-```{r qc_scatter, echo=FALSE}
+```{r qc_scatter}
 FeatureScatter(call, feature1 = "nCount_RNA", feature2 = "percent.mt")
 ```
 
