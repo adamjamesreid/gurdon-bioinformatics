@@ -9,11 +9,6 @@ output:
     number_sections: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = "../course_files/")
-```
-
 # Identifying cell types
 
 ## Introduction
@@ -42,8 +37,7 @@ Read in a list of samples and CellRanger results locations. This is a convenient
 You can change the list and not have to change your code.
 
 ```{r read_sample_list}
-message(getwd())
-samples_df <- read.csv("Data/samples_to_downsample.csv", header=TRUE)
+samples_df <- read.csv("https://raw.githubusercontent.com/adamjamesreid/gurdon-bioinformatics/main/docs/samples_to_downsample.txt", header=TRUE)
 samples <- setNames(samples_df[,2], samples_df[,1])
 ```
 

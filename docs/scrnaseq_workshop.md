@@ -7,7 +7,7 @@ Much of this material has been remixed from training materials developed by Univ
 
 ### Aim of the course
 
-- Learn the initial steps of analysing single cell RNA-seq data from mapping to differential expression
+- Learn the initial steps of analysing single cell RNA-seq data from mapping to differential expression using the Seurat packge in R
 - The course aims to be practical, focussing on effective analysis with enough detail to avoid common pitfalls 
 
 ### Learning outcomes
