@@ -63,7 +63,7 @@ Where these data are stored on your computer will affect some of the commands in
 Level 1 meeting room
 
 - Check set up (9am)
-- Introduction (slides)
+- Introduction ([slides](Gurdon_scrnaseq_Day1.pdf))
 - Raw data processing (Demo)
 - Quality Control
 - **LUNCH 12.30pm-13.30pm**
@@ -76,7 +76,7 @@ Level 1 meeting room
 
 Level 3 meeting room
 
-- Introduction 9am (slides)
+- Introduction 9am ([slides](Gurdon_scrnaseq_Day2.pdf))
 - Identifying cell types
 - Identifying differentially expressed genes
 - **LUNCH 12.30pm-13.30pm**
