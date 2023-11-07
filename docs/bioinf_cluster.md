@@ -106,7 +106,7 @@ The filesystem on a HPC cluster often consists of storage partitions that are sh
 
 Although the filesystem organisation may differ depending on the institution, typical HPC servers often have two types of storage:
 
-The user's home directory (e.g. /mnt/home1/user) is the default directory that one lands on when logging in to the HPC. This is often quite small and possibly backed up. The home directory can be used for storing things like configuration files or locally installed software.
+The user's home directory (e.g. /mnt/home3/user) is the default directory that one lands on when logging in to the HPC. This is often quite small and possibly backed up. The home directory can be used for storing things like configuration files or locally installed software.
 
 A scratch space (e.g. /mnt/scratch/user), which is high-performance, large-scale storage. This type of storage may be private to the user or shared with a group. It is usually not backed up, so the user needs to ensure that important data are stored elsewhere. This is the main partition were data is processed from.
 
@@ -195,13 +195,13 @@ ssh ajr236@cb-milan1.gurdon.private.cam.ac.uk
 Copy a file from cluster to my computer (from my computer)
 
 ```
-scp ajr236@cb-milan1.gurdon.private.cam.ac.uk:/mnt/home1/reid/ajr236/graph.png .
+scp ajr236@cb-milan1.gurdon.private.cam.ac.uk:/mnt/home3/reid/ajr236/graph.png .
 ```
 
 Copy a file from my computer to the cluster (from my computer)
 
 ```
-scp graph.png ajr236@cb-milan1.gurdon.private.cam.ac.uk:/mnt/home1/reid/ajr236/
+scp graph.png ajr236@cb-milan1.gurdon.private.cam.ac.uk:/mnt/home3/reid/ajr236/
 ```
 
 #### wget – get files from the internet
@@ -534,7 +534,7 @@ cd tutorial
 wget http://ftp.flybase.org/releases/FB2021_06/precomputed_files/genes/automated_gene_summaries.tsv.gz 
 
 # From local machine, copy the file from the cluster to that machine
-scp ajr236@cb-milan1.gurdon.private.cam.ac.uk:/mnt/home1/reid/ajr236/tutorial/automated_gene_summaries.tsv.gz .
+scp ajr236@cb-milan1.gurdon.private.cam.ac.uk:/mnt/home3/reid/ajr236/tutorial/automated_gene_summaries.tsv.gz .
 
 # Unzip the file
 gunzip automated_gene_summaries.tsv.gz
