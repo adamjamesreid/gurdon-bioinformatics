@@ -31,8 +31,9 @@ Some of this material has been remixed from training materials developed by Univ
 - [Part 2 Submitting jobs](#part-2-submitting-jobs)
   - [Slurm job scheduler](#slurm_job_scheduler)
   - [Practical 2](#practical-2)
-- [Part 3 Rstudio and installing software](#part-3-rstudio-and-installing-software)
+- [Part 3 Rstudio, Jupyter lab and installing software](#part-3-rstudio-and-installing-software)
   - [RStudio server](#rstudio-server)
+  - [Jupyter lab](#jupyter-lab)
   - [Installing software](#installing-software)
 - [Appendix](#appendix)
 
@@ -488,6 +489,47 @@ When you install an R package on cb-milan1 it will not be available from R on ot
 If you install a more up-to-date version than is available centrally (in /usr/local/lib/R/site-library), then both will be available in the “packages” menu.
 
 Default loading e.g. “library(Seurat)” will be to your local version.
+
+### jupyter lab
+
+You may want to run Jupyter lab (or notebook) on the cluster so you can, for instance, analyse scRNA-seq data using python and scanpy. 
+
+Login to the cluster:
+
+`ssh <user>@cb-milan1.gurdon.private.cam.ac.uk`
+
+Start a screen:
+
+`screen -S jupyterlab`
+
+Allocate resources on slurm:
+
+`salloc -p 1804 -c 2 --mem=50G`
+
+Submit an interactive job to slurm
+
+`srun --pty bash`
+
+Activate a conda environment if needed?
+
+`conda activate scanpy`
+
+Note which node the job is running on. Then start jupyter lab/notebook on a specific port, e.g. port 8181. N.b. when running Jupyter notebook you may need to do this first `export XDG_RUNTIME_DIR=""`
+
+`jupyter lab --no-browser --ip 0.0.0.0 --port 8181`
+
+Copy the link that shows up in your screen e.g.
+
+`http://127.0.0.1:8181/lab?token=53da29195682403ce73074170f3a260b80c36004571a1b89`
+
+Start a new terminal on your laptop / desktop and ssh again with port forwarding this time. The port 8181 on the local machine will be connected to 8181 on the cluster node (which we specified above) by a tunnel.
+
+`ssh ajr236@cb-milan1.gurdon.private.cam.ac.uk -L 8181:node19:8181`
+
+Kill screen - when all is done the screen will hang around unless you kill it (n.b. this kills all your screens)
+
+`pkill screen`
+
 
 ### Installing software
   
