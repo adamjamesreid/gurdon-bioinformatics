@@ -518,13 +518,15 @@ Note which node the job is running on. Then start jupyter lab/notebook on a spec
 
 `jupyter lab --no-browser --ip 0.0.0.0 --port 8181`
 
-Copy the link that shows up in your screen e.g.
+Copy the link that shows up in your screen - something like:
 
 `http://127.0.0.1:8181/lab?token=53da29195682403ce73074170f3a260b80c36004571a1b89`
 
 Start a new terminal on your laptop / desktop and ssh again with port forwarding this time, substituting <node> for the actual node your job is running on. Port 8181 on the local machine will be connected to 8181 on the cluster node (which we specified above) by a tunnel.
 
 `ssh ajr236@cb-milan1.gurdon.private.cam.ac.uk -L 8181:<node>:8181`
+
+Then paste the Jupyter lab URL you copied into your browser - tada!
 
 Kill screen - when all is done the screen will hang around unless you kill it (n.b. this kills all your screens)
 
