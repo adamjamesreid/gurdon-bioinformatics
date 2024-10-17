@@ -12,6 +12,8 @@ Sina Beier - Senior Bioinformatician
 
 [mito_var](https://github.com/adamjamesreid/mito_var): mitochondrial rare variant calling in Drosophila
 
+[FunJacc](https://github.com/adamjamesreid/FunJacc): Clustering of functional terms to aid interpretation
+
 ## Course materials
 
 [Bioinformatics on the cluster](docs/bioinf_cluster.md)
