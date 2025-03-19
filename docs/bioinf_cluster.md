@@ -709,7 +709,6 @@ sbatch -J sample2_batch map_batch.sh 
 
 <hr>  
 
-![wellcome](../images/wellcome.png)
 ![gurdon](../images/gurdon.png)
 <img src="../images/cambridge.png" alt="cambridge" width="600"/>
 
