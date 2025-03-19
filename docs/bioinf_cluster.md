@@ -125,36 +125,33 @@ At the Gurdon Institute we have:
 
   Useful for: Running compute jobs, generating lots of intermediate files
 
-- __Datastore__ /mnt/Sequencing and smb://datastore.computing.gurdon.cam.ac.uk/Sequencing
+#### How do I move data between RFS and the Gurdon cluster?
 
-  Useful for: where to find your Gurdon and CI sequencing data
-  
-For backed up directories it is important to avoid large numbers of files and non-work related files as this slows down back-ups and reduces space available for others.
+Although sequencing data, stored on RFS, is made available on the cluster, you cannot mount your RFS project folders on the cluster.
 
+Instead you can mount your RFS folder on e.g. your laptop and then use FileZilla to copy across to the Gurdon cluster.
 
 #### Where is my sequencing data?
 
-Sequencing data is kept in the Sequencing Datastore. This is accessible from your computer by mounting this samba drive `smb://datastore.computing.gurdon.cam.ac.uk` e.g. using *Finder* -> *Go* -> *Connect to Server* and pasting in the link on a Mac.
-
-This Sequencing Datastore is also mounted on the compute cluster at `/mnt/Sequencing`.
+Sequencing data is now stored in the Sequencing folder of your group's RFS project and mounted on the cluster: `Sequencing`
 
 For samples sequenced at CI, data is automatically downloaded to:
 
-  `//Datastore/Sequencing/(GL Folder)/CI FASTQ/` on the samba share and `/mnt/Sequencing/(GL Folder)/CI FASTQ/` on cb-milan1
+  `/mnt/beegfs/Sequencing/(GL Folder)/CI FASTQ/` on cb-milan1
 
   (ftp server is checked nightly at 0300)
 
 For samples sequenced at the Gurdon Institute, raw data is manually compressed and copied to:
 
-  `//Datastore/Sequencing/(GL Folder)/Run Folder/`
+  `/mnt/beegfs/Sequencing/(GL Folder)/Run Folder/`
 
 FASTQ files are manually copied to (Kay Harnish):
 
-  `//Datastore/Sequencing/(GL Folder)/Basespace FASTQ/`
+  `/mnt/beegfs/Sequencing/(GL Folder)/Basespace FASTQ/`
 
 Manually demultiplexed FASTQ files (CI or GI):
 
-  `//Datastore/Sequencing/(GL Folder)/CB FASTQ/`
+  `/mnt/beegfs//Sequencing/(GL Folder)/CB FASTQ/`
 
 #### Bioinformatics share
 
@@ -536,7 +533,7 @@ Kill screen - when all is done the screen will hang around unless you kill it (n
 ### Installing software
   
 - You can install software and run it from your home directory (you may want to add paths to your .bashrc file)
-- You can use conda for R/python packages (local but allows multiple environments and “easy” installation)
+- You can use [Mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) for R/python packages (local but allows multiple environments and “easy” installation). We strongly recommend mamba over conda due to [licensing issues with some conda repositories](https://www.datacamp.com/blog/navigating-anaconda-licensing)
 - If something might be generally useful and/or it is hard (impossible without root access?) to install you can ask [Charles](mailto:crb55@cam.ac.uk) to install it centrally.
 
 ## Appendix
@@ -556,8 +553,7 @@ Slurm - https://www.chpc.utah.edu/presentations/SlurmCheatsheet.pdf
 |            | (Running compute jobs) |
 |            | __home3__ `/mnt/home3` – limited space (1 Tb) |
 |            | (Installing software, backing up results, Conda environments) |
-| Datastore  | `/mnt/Sequencing` (from head node only) |
-|            | `smb://datastore.computing.gurdon.cam.ac.uk/Sequencing` mounted locally on your Mac or PC |
+| Sequencing | `/mnt/beegfs/Sequencing` (from head node only) |
 | RStudio server | v4.2.0   http://cb-milan1.gurdon.private.cam.ac.uk:8787/ |
 |            |v4.1.0  http://cb-head4.gurdon.private.cam.ac.uk:8787/ |
 |            | v3.5.2  http://cb-head3.gurdon.private.cam.ac.uk:8787/ |
