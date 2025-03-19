@@ -2,6 +2,7 @@
 # Bioinformatics on the cluster
 
 Author: Adam Reid, Head of Bioinformatics, Gurdon Institute, University of Cambridge
+
 Email: ajr236@cam.ac.uk
 
 Some of this material has been remixed from training materials developed by University of Cambridge Bioinformatics Training Facility [course on High Performance Computing](https://cambiotraining.github.io/hpc-intro/), Licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
