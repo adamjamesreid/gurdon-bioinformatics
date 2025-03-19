@@ -59,8 +59,8 @@ A typical personal computer may have a CPU with 4-8 cores.
 A single compute node on the HPC may have 32-48 cores (and often these are faster than the CPU on our computers).
 
 - **RAM** (random access memory) is a quick access storage where data is temporarily held while being processed by the CPU. 
-A typical personal computer may have 8-32Gb of RAM. 
-A single compute nodes on a HPC may often have >100Gb RAM.
+A typical personal computer may have 8-32GB of RAM. 
+A single compute nodes on a HPC may often have >100GB RAM.
 
 - **GPUs** (graphical processing units) are similar to CPUs, but are more specialised in the type of operations they can do. While less flexible than CPUs, each GPU can do thousands of calculations in parallel. 
 This makes them extremely well suited for graphical tasks, but also more generally for matrix computations and so are often used in machine learning applications. 
@@ -116,9 +116,9 @@ At the Gurdon Institute we have:
    
 - __home3__ (/mnt/home3/group/user)
 
-  Features: limited total space (1 Tb), backed up
+  Features: limited total space (1 TB), backed up locally, but important data should also be backed up elsewhere e.g. RFS/RDS
 
-  Useful for: Installing software and backing up results
+  Useful for: Installing software, storage of data and results
   
 - __scratch__ (/mnt/scratch/group/user)
 
@@ -134,19 +134,19 @@ Instead you can mount your RFS folder on e.g. your laptop and then use FileZilla
 
 #### Where is my sequencing data?
 
-Sequencing data is now stored in the Sequencing folder of your group's RFS project and mounted on the cluster: `/mnt/beegfs/Sequencing`
+Sequencing data is now stored in the Sequencing folder of your group's RFS project and mirrored on the cluster: `/mnt/beegfs/Sequencing`
 
 For samples sequenced at CI, data is automatically downloaded to:
 
   `/mnt/beegfs/Sequencing/(GL Folder)/CI FASTQ/` on cb-milan1
 
-  (ftp server is checked nightly at 0300)
+  (ftp server is checked hourly)
 
 For samples sequenced at the Gurdon Institute, raw data is manually compressed and copied to:
 
   `/mnt/beegfs/Sequencing/(GL Folder)/Run Folder/`
 
-FASTQ files are manually copied to (Kay Harnish):
+FASTQ files are manually copied to:
 
   `/mnt/beegfs/Sequencing/(GL Folder)/Basespace FASTQ/`
 
@@ -552,7 +552,7 @@ Slurm - https://www.chpc.utah.edu/presentations/SlurmCheatsheet.pdf
 | Logging in | `ssh <user>@cb-milan1.gurdon.private.cam.ac.uk` |
 | Filesystem | __Scratch__ `/mnt/scratch` – no quotas (~1 Petabyte total) |
 |            | (Running compute jobs) |
-|            | __home3__ `/mnt/home3` – limited space (1 Tb) |
+|            | __home3__ `/mnt/home3` – limited space (1 TB) |
 |            | (Installing software, backing up results, Conda environments) |
 | Sequencing | `/mnt/beegfs/Sequencing` (from head node only) |
 | RStudio server | v4.2.0   http://cb-milan1.gurdon.private.cam.ac.uk:8787/ |
