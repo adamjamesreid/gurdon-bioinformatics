@@ -134,7 +134,7 @@ Instead you can mount your RFS folder on e.g. your laptop and then use FileZilla
 
 #### Where is my sequencing data?
 
-Sequencing data is now stored in the Sequencing folder of your group's RFS project and mounted on the cluster: `Sequencing`
+Sequencing data is now stored in the Sequencing folder of your group's RFS project and mounted on the cluster: `/mnt/beegfs/Sequencing`
 
 For samples sequenced at CI, data is automatically downloaded to:
 
