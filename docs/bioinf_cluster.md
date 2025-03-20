@@ -55,15 +55,19 @@ These are the main resources we need to consider:
 
 - **CPU** (central processing units) is the "brain" of the computer, performing a wide range of operations and calculations. 
 CPUs can have several "cores", which means they can run tasks in parallel, increasing the throughput of calculations per second. 
+
 A typical personal computer may have a CPU with 4-8 cores. 
-A single compute node on the HPC may have 32-48 cores (and often these are faster than the CPU on our computers).
+
+A single compute node on an HPC may have 24-128 cores.
 
 - **RAM** (random access memory) is a quick access storage where data is temporarily held while being processed by the CPU. 
 A typical personal computer may have 8-32GB of RAM. 
-A single compute nodes on a HPC may often have >100GB RAM.
+
+A single compute node on an HPC may often have 256GB-1TB RAM.
 
 - **GPUs** (graphical processing units) are similar to CPUs, but are more specialised in the type of operations they can do. While less flexible than CPUs, each GPU can do thousands of calculations in parallel. 
 This makes them extremely well suited for graphical tasks, but also more generally for matrix computations and so are often used in machine learning applications. 
+
 
 Usually, HPC clusters are available to members of large institutions (such as a Universities or research institutes) or sometimes from cloud providers. 
 This means that:
@@ -78,7 +82,6 @@ There has to be a way to manage all this workload, and this is why HPC clusters 
 Here is a schematic of a cluster, we go into its details in the following sections. 
 
 ![Organisation of a typical HPC.](../images/hpc_overview.svg)
-
 
 ### Nodes
 
@@ -125,6 +128,13 @@ At the Gurdon Institute we have:
   Features: no quotas (~1 Petabyte total), not backed up
 
   Useful for: Running compute jobs, generating lots of intermediate files
+
+- **Our resources**
+The 2004 partition (queue) has access to nodes 1-8 each with 64 cores (128 threads) and 512GB RAM  and nodes 11 and 12 each with 128 cores (256 threads) and 1TB RAM each (All AMD Zen 3 CPUs).
+
+The 1804 partition has access to nodes 17-24 each with 24 cores (48 threads) and 256GB RAM (all Intel Haswell CPUs).
+
+We have several GPUs available on the cluster. For access please contact Charles.
 
 #### How do I move data between RFS and the Gurdon cluster?
 
