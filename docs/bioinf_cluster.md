@@ -117,7 +117,7 @@ A scratch space (e.g. /mnt/scratch/user), which is high-performance, large-scale
 
 At the Gurdon Institute we have:
    
-- __home3__ (/mnt/home3/group/user), __home2__ (/mnt/home2/group/user), __home5__ (External users: /mnt/home5/group/user)
+- __home2__ (/mnt/home2/group/user), __home3__ (/mnt/home3/group/user), __home5__ (External users: /mnt/home5/group/user)
 
   Features: limited total space (1 TB), backed up locally, but important data should also be backed up elsewhere e.g. RFS/RDS
 
@@ -311,8 +311,6 @@ alloc = node in use
   
 #### Examining pending and running jobs
 
-!!! Add image here
-
 ```
 squeue
 squeue -u <username>
@@ -403,7 +401,7 @@ date
 
 This is a custom script which makes submitting sbatch jobs easier
   
-It is located at `/mnt/home3/slurm/slurm_sub.py`. Simple things can be run very simply e.g. `slurm_sub.py sleep 10`
+It is located at `/mnt/shared/slurm/slurm_sub.py`. Simple things can be run very simply e.g. `slurm_sub.py sleep 10`
 
 - STDOUT goes to job.o
 - STERR goes to job.e
@@ -416,7 +414,7 @@ It is located at `/mnt/home3/slurm/slurm_sub.py`. Simple things can be run very 
 | sbatch parameter | Flag | Default value |
 |-----------|------|---------------|
 | Job name  | `-J` or `--jobname` | <script name> |
-| Partition/queue | `-p` or `--partition` | 1804 |
+| Partition/queue | `-p` or `--partition` | 2204 |
 | Number of tasks | `-n` or `--ntasks`| - |
 | Number of nodes | `-N` or `--nodes` | 1 |
 | Standard output | `-o`  | `slurm-<jobid>.out` |
@@ -430,7 +428,7 @@ It is located at `/mnt/home3/slurm/slurm_sub.py`. Simple things can be run very 
 If you don't specify resource requirements you will get the following resources by default:
 
 - 7 days of running time (equivalent to -t 7-00:00:00)
-- 1804 partition, with Ubuntu 18.04 operating system
+- 2204 partition, with Ubuntu 22.04 operating system
 - 1 CPU (equivalent to -c 1)
 - 4GB RAM (equivalent to --mem=4000)
   
@@ -487,27 +485,25 @@ BONUS EXERCISE: Write a shell script which captures the steps and runs the whole
 
 ### RStudio server
 
-Different head nodes have different versions of R installed and these can each be accessed on your laptop from different URLs. cb-head3 and cb-head4 can be considered legacy nodes which will be removed as the new cluster develops. Older R versions will be maintained by virtualisation.
-  
+Different head nodes have different versions of R installed and these can each be accessed on your laptop from different URLs. Older R versions will be maintained by virtualisation.
+
+R v4.4.2 on cb-milan2   http://cb-milan2.gurdon.private.cam.ac.uk:8787/
+
 R v4.2.0 on cb-milan1   http://cb-milan1.gurdon.private.cam.ac.uk:8787/
-
-R v4.1.0 on cb-head4    http://cb-head4.gurdon.private.cam.ac.uk:8787/
-
-R v3.5.2 on cb-head3    http://cb-head3.gurdon.private.cam.ac.uk:8787/
   
-When you install an R package on cb-milan1 it will not be available from R on other nodes, each is kept separate. Your own R package installs are kept in e.g. `~/R/x86_64-pc-linux-gnu-library/4.2/` with a different folder for each R version.
+When you install an R package on cb-milan2 it will not be available from R on other nodes, each is kept separate. Your own R package installs are kept in e.g. `~/R/x86_64-pc-linux-gnu-library/4.4/` with a different folder for each R version.
   
 If you install a more up-to-date version than is available centrally (in /usr/local/lib/R/site-library), then both will be available in the “packages” menu.
 
-Default loading e.g. “library(Seurat)” will be to your local version.
+Default loading e.g. “library(Seurat)” will use your local version.
 
 ### jupyter lab
 
-You may want to run Jupyter lab (or notebook) on the cluster so you can, for instance, analyse scRNA-seq data using python and scanpy. 
+You may want to run Jupyter lab (or notebook) on the cluster so you can, for instance, analyse scRNA-seq data using python and scanpy. You can do this through software like Visual Studio Code, or directly by setting up a jupyterlab instance, as here:
 
 Login to the cluster:
 
-`ssh <user>@cb-milan1.gurdon.private.cam.ac.uk`
+`ssh <user>@cb-milan2.gurdon.private.cam.ac.uk`
 
 Start a screen:
 
@@ -515,13 +511,13 @@ Start a screen:
 
 Allocate resources on slurm:
 
-`salloc -p 1804 -c 2 --mem=50G`
+`salloc -p 2004 -c 4 --mem=64G`
 
 Submit an interactive job to slurm
 
 `srun --pty bash`
 
-Activate a conda environment if needed?
+Activate a conda/mamba environment if needed, e.g.
 
 `conda activate scanpy`
 
@@ -535,7 +531,7 @@ Copy the link that shows up in your screen - something like:
 
 Start a new terminal on your laptop / desktop and ssh again with port forwarding this time, substituting <node> for the actual node your job is running on. Port 8181 on the local machine will be connected to 8181 on the cluster node (which we specified above) by a tunnel.
 
-`ssh ajr236@cb-milan1.gurdon.private.cam.ac.uk -L 8181:<node>:8181`
+`ssh ajr236@cb-milan2.gurdon.private.cam.ac.uk -L 8181:<node>:8181`
 
 Then paste the Jupyter lab URL you copied into your browser - tada!
 
@@ -562,21 +558,23 @@ Slurm - https://www.chpc.utah.edu/presentations/SlurmCheatsheet.pdf
 
 |            |             |
 |------------|-------------|
-| Logging in | `ssh <user>@cb-milan1.gurdon.private.cam.ac.uk` |
+| Logging in | `ssh <user>@cb-milan2.gurdon.private.cam.ac.uk` |
 | Filesystem | __Scratch__ `/mnt/scratch` – no quotas (~1 Petabyte total) |
 |            | (Running compute jobs) |
+|            | __home2__ `/mnt/home2` – limited space (1 TB) |
 |            | __home3__ `/mnt/home3` – limited space (1 TB) |
+|            | __home5__ `/mnt/home5` – limited space (1 TB) |
 |            | (Installing software, backing up results, Conda environments) |
 | Sequencing | `/mnt/beegfs/Sequencing` (from head node only) |
 | RStudio server | v4.2.0   http://cb-milan1.gurdon.private.cam.ac.uk:8787/ |
-|            |v4.1.0  http://cb-head4.gurdon.private.cam.ac.uk:8787/ |
-|            | v3.5.2  http://cb-head3.gurdon.private.cam.ac.uk:8787/ |
+|            |v4.4.2  http://cb-milan2.gurdon.private.cam.ac.uk:8787/ |
+
 
 ### Practical 1 answers
 
 ```
 # SSH to the cluster
-ssh ajr236@cb-milan1.gurdon.private.cam.ac.uk
+ssh ajr236@cb-milan2.gurdon.private.cam.ac.uk
 
 # Make a new working directory
 mkdir tutorial
@@ -588,7 +586,7 @@ cd tutorial
 wget http://ftp.flybase.org/releases/FB2021_06/precomputed_files/genes/automated_gene_summaries.tsv.gz 
 
 # From local machine, copy the file from the cluster to that machine
-scp ajr236@cb-milan1.gurdon.private.cam.ac.uk:/mnt/home3/reid/ajr236/tutorial/automated_gene_summaries.tsv.gz .
+scp ajr236@cb-milan2.gurdon.private.cam.ac.uk:/mnt/home3/reid/ajr236/tutorial/automated_gene_summaries.tsv.gz .
 
 # Unzip the file
 gunzip automated_gene_summaries.tsv.gz
@@ -597,7 +595,7 @@ gunzip automated_gene_summaries.tsv.gz
 head -10 automated_gene_summaries.tsv > head.txt
 
 # From local machine, copy the new file to the working directory on the cluster
-scp head.txt ajr236@cb-milan1.gurdon.private.cam.ac.uk:~/tutorial/
+scp head.txt ajr236@cb-milan2.gurdon.private.cam.ac.uk:~/tutorial/
 ```
 
 ### Practical 2 answers
