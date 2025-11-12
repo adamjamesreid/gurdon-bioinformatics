@@ -441,7 +441,17 @@ Choosing your parameters can be tricky, because you probably don't know how much
 It's worth keeping in mind that partitions have separate queues, and you should always try to choose the partition that is most suited to your job.
 
 We have __1804__ which runs Ubuntu 18.04 and __2004__ which runs Ubuntu 20.04. __2004__ uses more recent machines which have more resources.  
-  
+
+There is also a partition specifically for running Nextflow jobs...
+
+### Nextflow
+
+If you want ot run Nextflow pipelines on the cluster you should write your work directory and results to a folder in your scratch directory. Lots of intermediate files are produced and this is much more efficient on scratch rather than in the slower home directory with more limited space.
+
+You should instruct Nextflow to run jobs on the NXFL partition. You can do this using the Gurdon config file ```/mnt/shared/nextflow/gurdon.config```.
+
+
+
 ### Job submission examples
 
 If we run the program *hostname* on the head node we get this result:
