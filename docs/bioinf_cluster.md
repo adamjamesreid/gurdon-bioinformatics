@@ -117,7 +117,7 @@ A scratch space (e.g. /mnt/scratch/user), which is high-performance, large-scale
 
 At the Gurdon Institute we have:
    
-- __home3__ (/mnt/home3/group/user)
+- __home3__ (/mnt/home3/group/user), __home2__ (/mnt/home2/group/user), __home5__ (External users: /mnt/home5/group/user)
 
   Features: limited total space (1 TB), backed up locally, but important data should also be backed up elsewhere e.g. RFS/RDS
 
@@ -148,13 +148,13 @@ Sequencing data is now stored in the Sequencing folder of your group's RFS proje
 
 For samples sequenced at CI, data is automatically downloaded to:
 
-  `/mnt/beegfs/Sequencing/(GL Folder)/CI FASTQ/` on cb-milan1
+  `/mnt/beegfs/Sequencing/(GL Folder)/CI FASTQ/` on cb-milan2
 
   (ftp server is checked hourly)
 
 For samples sequenced at the Gurdon Institute, raw data is manually compressed and copied to:
 
-  `/mnt/beegfs/Sequencing/(GL Folder)/Run Folder/`
+  `/mnt/beegfs/Sequencing/(GL Folder)/NovaSeq FASTQ/`
 
 FASTQ files are manually copied to:
 
@@ -189,12 +189,12 @@ Open __Command Prompt__ with this icon:
 Then type:
 
 ```
-ssh <user>@cb-milan1.gurdon.private.cam.ac.uk
+ssh <user>@cb-milan2.gurdon.private.cam.ac.uk
 ```
   
 e.g.
 ```
-ssh ajr236@cb-milan1.gurdon.private.cam.ac.uk
+ssh ajr236@cb-milan2.gurdon.private.cam.ac.uk
 ```
 
 ### Moving files
@@ -204,13 +204,13 @@ ssh ajr236@cb-milan1.gurdon.private.cam.ac.uk
 Copy a file from cluster to my computer (from my computer)
 
 ```
-scp ajr236@cb-milan1.gurdon.private.cam.ac.uk:/mnt/home3/reid/ajr236/graph.png .
+scp ajr236@cb-milan2.gurdon.private.cam.ac.uk:/mnt/home3/reid/ajr236/graph.png .
 ```
 
 Copy a file from my computer to the cluster (from my computer)
 
 ```
-scp graph.png ajr236@cb-milan1.gurdon.private.cam.ac.uk:/mnt/home3/reid/ajr236/
+scp graph.png ajr236@cb-milan2.gurdon.private.cam.ac.uk:/mnt/home3/reid/ajr236/
 ```
 
 #### wget – get files from the internet
