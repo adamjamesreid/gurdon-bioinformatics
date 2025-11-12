@@ -132,9 +132,9 @@ At the Gurdon Institute we have:
 
 - **Our resources**
 
-The 2204 partition (queue) has access to nodes 5-10 each with 384GB RAM and 64 cores (128 threads) and node 11 (1TB) 128 cores (256 threads).
+The 2204 partition (queue) has access to nodes 5-10 each with 384GB RAM and 64 cores (128 threads) and node 11 (1TB) with 128 cores (256 threads).
 
-The 2004 partition has access to nodes 1-4 (385GB RAM) and 12 (1TB) each with 128 cores (256 threads).
+The 2004 partition has access to nodes 1-4 each with 384GB RAM and 64 cores (128 threads) and node 12 (1TB) with 128 cores (256 threads).
 
 The 1804 partition has access to nodes 17-24 each with 24 cores (48 threads) and 256GB RAM (all Intel Haswell CPUs).
 
