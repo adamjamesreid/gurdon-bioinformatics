@@ -130,7 +130,14 @@ At the Gurdon Institute we have:
   Useful for: Running compute jobs, generating lots of intermediate files
 
 - **Our resources**
-The 2004 partition (queue) has access to nodes 1-8 each with 64 cores (128 threads) and 512GB RAM  and nodes 11 and 12 each with 128 cores (256 threads) and 1TB RAM each (All AMD Zen 3 CPUs).
+
+<img width="468" height="98" alt="image" src="https://github.com/user-attachments/assets/77cfb2c8-98b4-4002-affa-0b918f100818" />
+
+<img width="468" height="98" alt="image" src="https://github.com/user-attachments/assets/bfa52b02-91e6-4dfa-b03c-745e8afac633" />
+
+The 2204 partition (queue) has access to nodes 5-11 each with 64 cores (128 threads) and 384GB RAM.
+
+The 2004 partition has access to nodes 1-4 (385GB RAM) and 12 (1TB) each with 128 cores (256 threads).
 
 The 1804 partition has access to nodes 17-24 each with 24 cores (48 threads) and 256GB RAM (all Intel Haswell CPUs).
 
