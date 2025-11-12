@@ -132,7 +132,7 @@ At the Gurdon Institute we have:
 
 - **Our resources**
 
-The 2204 partition (queue) has access to nodes 5-11 each with 64 cores (128 threads) and 384GB RAM.
+The 2204 partition (queue) has access to nodes 5-10 each with 384GB RAM and 64 cores (128 threads) and node 11 (1TB) 128 cores (256 threads).
 
 The 2004 partition has access to nodes 1-4 (385GB RAM) and 12 (1TB) each with 128 cores (256 threads).
 
@@ -148,25 +148,15 @@ Instead you can mount your RFS folder on e.g. your laptop and then use FileZilla
 
 #### Where is my sequencing data?
 
-Sequencing data is now stored in the Sequencing folder of your group's RFS project and mirrored on the cluster: `/mnt/beegfs/Sequencing`
+Sequencing data is now stored in the Sequencing folder of your group's RFS project and mirrored on the cluster in: ```/mnt/beegfs/Sequencing```
 
 For samples sequenced at CI, data is automatically downloaded to:
 
-  `/mnt/beegfs/Sequencing/(GL Folder)/CI FASTQ/` on cb-milan2
+```/mnt/beegfs/Sequencing/(GL Folder)/CI FASTQ/```
 
-  (ftp server is checked hourly)
+For samples sequenced at the Gurdon Institute, FASTQ files are manually copied to:
 
-For samples sequenced at the Gurdon Institute, raw data is manually compressed and copied to:
-
-  `/mnt/beegfs/Sequencing/(GL Folder)/NovaSeq FASTQ/`
-
-FASTQ files are manually copied to:
-
-  `/mnt/beegfs/Sequencing/(GL Folder)/Basespace FASTQ/`
-
-Manually demultiplexed FASTQ files (CI or GI):
-
-  `/mnt/beegfs//Sequencing/(GL Folder)/CB FASTQ/`
+```/mnt/beegfs/Sequencing/(GL Folder)/NovaSeq FASTQ/```
 
 #### Bioinformatics share
 
