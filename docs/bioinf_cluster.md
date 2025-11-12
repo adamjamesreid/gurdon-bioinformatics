@@ -36,7 +36,7 @@ Some of this material has been remixed from training materials developed by Univ
   - [RStudio server](#rstudio-server)
   - [Jupyter lab](#jupyter-lab)
   - [Installing software](#installing-software)
-  - [Running Nextflow pipelines](#nextflow)]
+  - [Running Nextflow pipelines](#nextflow)
 - [Appendix](#appendix)
 
 ## Part 1 Introduction to the cluster
@@ -544,11 +544,13 @@ Kill screen - when all is done the screen will hang around unless you kill it (n
 
 ### Nextflow
 
-If you want ot run Nextflow pipelines on the cluster you should write your work directory and results to a folder in your scratch directory. Lots of intermediate files are produced and this is much more efficient on scratch rather than in the slower home directory with more limited space.
+If you want to run Nextflow pipelines on the cluster you should write your work directory and results to a folder in your scratch directory. Lots of intermediate files are produced and this is much more efficient on scratch rather than in the slower home directory with more limited space.
 
 You should instruct Nextflow to run jobs on the NXFL partition. You can do this using the Gurdon config file ```/mnt/shared/nextflow/gurdon.config```.
 
 You can submit the main Nextflow process as a job, rather than using screen or tmux, because of the long time limits on the Gurdon cluster.
+
+You should set your Nextflow cache directory to our shared one, e.g. ```export NXF_SINGULARITY_CACHEDIR="/mnt/shared/nextflow/"```
 
 ### Installing software
   
