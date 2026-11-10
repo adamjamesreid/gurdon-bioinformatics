@@ -1,7 +1,9 @@
 
 # Bioinformatics on the cluster
 
-Authors: Adam Reid, Head of Bioinformatics, Gurdon Institute, University of Cambridge; Sina Shallaby, Senior Bioinformatician, Gurdon Institute, University of Cambridge
+Authors: Adam Reid, Head of Bioinformatics, Gurdon Institute, University of Cambridge; Sina 
+
+Shallaby, Senior Bioinformatician, Gurdon Institute, University of Cambridge
 
 Email: ajr236@cam.ac.uk
 
@@ -147,9 +149,6 @@ At the Gurdon Institute we have:
 
 The 2204 partition (queue) has access to nodes 5-10 each with 384GB RAM and 64 cores (128 threads) and node 11 (1TB) with 128 cores (256 threads).
 This is the set default partition to use.
-
-The 2004 partition has access to nodes 1-4 each with 384GB RAM and 64 cores (128 threads) and node 12 (1TB) with 128 cores (256 threads).
-This might be used for legacy code that was originally written for this partition, when 2204 did not yet exist. The number of nodes availabe will potentially be reduced as nodes get updated to the 2204 partition.
 
 The 1804 partition has access to nodes 17-24 each with 24 cores (48 threads) and 256GB RAM (all Intel Haswell CPUs).
 
@@ -559,7 +558,7 @@ Copy the link that shows up in your screen - something like:
 
 Start a new terminal on your laptop / desktop and ssh again with port forwarding this time, substituting <node> for the actual node your job is running on. Port 8181 on the local machine will be connected to 8181 on the cluster node (which we specified above) by a tunnel.
 
-`ssh ajr236@cb-milan2.gurdon.private.cam.ac.uk -L 8181:<node>:8181`
+`ssh <user>@cb-milan2.gurdon.private.cam.ac.uk -L 8181:<node>:8181`
 
 Then paste the Jupyter lab URL you copied into your browser - tada!
 
@@ -608,7 +607,7 @@ To connect to the cluster regularly it is easiest to set up a preset connection 
 There you need to fill in some parameters:
 
 | Filezilla parameter | Value |
-|-----------|------|---------------|
+|---------------------|-------|
 | Protocol  | SFTP - SSH File Transfer Protocol |
 | Host | cb-milan2.gurdon.private.cam.ac.uk |
 | Port | 22 |
