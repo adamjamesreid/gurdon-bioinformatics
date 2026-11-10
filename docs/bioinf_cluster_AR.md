@@ -209,6 +209,8 @@ ssh ajr236@cb-milan2.gurdon.private.cam.ac.uk
 ### Moving files
 <a id="#moving-files"></a>
 
+As previously mentioned, you can use [FileZilla](#filezilla) to move files between your computer and the cluster. Additionally there are command line options which also allow you to retrieve files from other machines or servers.
+
 #### scp - move files between your computer and the cluster
 
 Copy a file from cluster to my computer (from my computer)
@@ -300,6 +302,9 @@ When should I use the head nodes?
 
 ### Slurm job scheduler
 <a id="#slurm-job-scheduler"></a>
+
+On a cluster, the computational resources have to be managed efficently to allow all users equal and plannable access to compute time and resources.
+To make this possible, a cluster uses a job scheduler to assign resources and run tasks efficiently and fairly without conflicts.
 
 On the Gurdon cluster (and on the [University of Cambridge HPC cluster](https://docs.hpc.cam.ac.uk/hpc/)) the job scheduler is __Slurm__
 
@@ -461,7 +466,7 @@ It's worth keeping in mind that partitions have separate queues, and you should 
 
 The current default partitions is __2204__ which runs Ubuntu 22.04. This is standard for job submitions if you don't specifically choose a partition and should be used for all current work as it uses the most recent hardware and software and has most resources available.
 
-We have two legacy partitions: __1804__ which runs Ubuntu 18.04 and __2004__ which runs Ubuntu 20.04. __2004__ uses more recent machines which have more resources.  
+We have a legacy partitions: __1804__ which runs Ubuntu 18.04.  
 
 There is also a partition specifically for running Nextflow jobs called __NXFL__. We will talk a bit more about setting up and using Nextflow on the cluster later on.
 
@@ -511,6 +516,8 @@ BONUS EXERCISE: Write a shell script which captures the steps and runs the whole
 ### RStudio server
 <a id="#rstudio-server"></a>
 
+RStudio is a development environment specifically for R. It allows you to write and run R code interactively instead of having to rely on submitting jobs on the cluster. RStudio would usually run on your computer and thus has limited memory available. We offer a browser-based version called RStudio where you can run larger projects directly on the Gurdon cluster, meaning your file storage will be on the cluster and there is more memory available to you than on your laptops.
+
 Different head nodes have different versions of R installed and these can each be accessed on your laptop from different URLs. Older R versions will be maintained by virtualisation.
 
 R v4.4.2 on cb-milan2   http://cb-milan2.gurdon.private.cam.ac.uk:8787/
@@ -526,6 +533,10 @@ Default loading e.g. “library(Seurat)” will use your local version.
 ### Jupyter lab
 <a id="#jupyter-lab"></a>
 
+Jupyter Lab is a developmental environment for Project Jupyter - an environment that allows you to create interactive notebooks for Python, Julia and R (amongst other additional languages). These notebooks provide reproducible pipelines for research that can be run on a computer or cluster. For larger projects it is particularly helpful to have all the resources of the cluster.
+
+We have an easier way to run Jupyter Notebooks on the cluster through using [Visual Studio Code](#vscode), so this information is mostly here for reference.
+
 You may want to run Jupyter lab (or notebook) on the cluster so you can, for instance, analyse scRNA-seq data using python and scanpy. You can do this through software like [Visual Studio Code](#vscode), or directly by setting up a jupyterlab instance, as here:
 
 Login to the cluster:
@@ -538,7 +549,7 @@ Start a screen:
 
 Allocate resources on slurm:
 
-`salloc -p 2004 -c 4 --mem=64G`
+`salloc -p 2204 -c 4 --mem=64G`
 
 Submit an interactive job to slurm
 
@@ -576,6 +587,8 @@ Identify the PID of the Jupyter lab screen and kill it with
 ### Nextflow
 <a id="#nextflow"></a>
 
+Nextflow is a framework to write and run reproducible computational pipelines. It comes with it's own developmental language to write new pipelines and also with an extensive database of (bioinformatics) pipelines already available through [Nextflow](https://www.nextflow.io/) and [nf-core](https://nf-co.re/).
+
 If you want to run Nextflow pipelines on the cluster you should write your work directory and results to a folder in your scratch directory. Lots of intermediate files are produced and this is much more efficient on scratch rather than in the slower home directory with more limited space.
 
 You should instruct Nextflow to run jobs on the NXFL partition. You can do this using the Gurdon config file ```/mnt/shared/nextflow/gurdon.config```.
@@ -597,6 +610,9 @@ You should set your Nextflow cache directory to our shared one, e.g. ```export N
 ### FileZilla
 <a id="#filezilla"></a>
 
+### FileZilla
+<a id="#filezilla"></a>
+
 FileZilla is a free file transfer program that allows you to upload and download files between your computer and the cluster using a secure SFTP connection.
 
 You can download the FileZilla Client for your operating system from:
@@ -604,10 +620,12 @@ https://filezilla-project.org/
 
 To connect to the cluster regularly it is easiest to set up a preset connection for it. You can do that by opening the Site Manager (under Files).
 
+![FileZilla Site Manager](../images/filezilla1.png)
+
 There you need to fill in some parameters:
 
 | Filezilla parameter | Value |
-|---------------------|-------|
+|-----------|---------------|
 | Protocol  | SFTP - SSH File Transfer Protocol |
 | Host | cb-milan2.gurdon.private.cam.ac.uk |
 | Port | 22 |
@@ -616,6 +634,8 @@ There you need to fill in some parameters:
 | Password  | <cluster password> |
 
 After saving this you can click "Connect" to connect to the cluster.
+
+![FileZilla Connection](../images/filezilla2.png)
 
 After connecting, the left panel shows the directory structure and files on your local computer, the right one shows the cluster. You can now drag files from one panel to the other which will copy them to the respective location.
 You can also create new folders on the cluster by right clicking into the right panel and selecting "Create Directory".
@@ -629,7 +649,7 @@ Filezilla only moves files, you cannot edit files, run commands or submit jobs.
 ### VScode
 <a id="#vscode"></a>
 
-Visual Studio Code is an IDE (Integrated Developmen Environment) allowing you to code in many languages including Python, R, Java, C, Julia. 
+Visual Studio Code is an IDE (Integrated Development Environment) allowing you to code in many languages including Python, R, Java, C, Julia. 
 You can load a variety of free extentions to extend its functionality.
 
 You can connect VSCode to a cluster in multiple ways. One way is loading the extention "Remote SSH" which allows you to connect to a cluster through a SSH tunnel. This extention installs a "Open Remote Window" option you can find all the way in the bottom left corner or when starting a new workspace under the selection "Connect to...".
@@ -645,12 +665,13 @@ Additionally you should install the "slurm" extention to submit jobs to the clus
 ### AI agents
 <a id="#ai-agents"></a>
 
-You can use AI like the university Copilot or Claude on the cluster. However, there are potential safety concerns with running AI agents directly on the cluster and giving them execution permissions. We are currently working out how to safely use AI on the cluster and would ask you to be very careful or refrain from it in the meantime.
+You can use AI like the university Copilot or Claude on the cluster. However, there are potential safety concerns with running AI agents directly on the cluster and giving them execution permissions. An AI agent usually has the same permissions on the cluster as the user who installed it, so your agent will only be able to access, edit and delete files you have permission to do so and will not affect other user's data. However it is advisable to set up the agent so it will always require your explicit review and permission to execute any command to avoid data loss and other problems.
 
-You can however use agents like Claude Code through [VSCode](#vscode) which help you with coding and documentation as well as setting up slurm submissions.
+You can use agents like Claude Code or Copilot through [Visual Studio Code](#vscode) which help you with coding and documentation as well as setting up slurm submissions.
 
 To set up Copilot in VSCode, the easiest solution is through installing and setting up the Github Copilot extention which will give you access to the Copilot account connected to your GitHub account.
-To set up Claude in VSCode, you need the Claude Code app installed on your computer. You can then run it in every VSCode project by running `claude` from the shell in VSCode. Alternatively there exist several Claude extentions for VSCode like "Claude Code for VS Code" (the official Anthropic extention) or "Claude Code Assistant for VSCode" as well as many others specific to Claude Chat or managing Claude config files.
+
+To set up Claude in VSCode, you will need the [Claude Code app](https://claude.com/product/claude-code) installed on the cluster. You can then run it in every VSCode project by running `claude` from the shell in VSCode. Alternatively there exist several Claude extentions for VSCode like "Claude Code for VS Code" (the official Anthropic extention) or "Claude Code Assistant for VSCode" as well as many others specific to Claude Chat or managing Claude config files.
 
 
 ## Appendix
